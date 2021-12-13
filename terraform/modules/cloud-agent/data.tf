@@ -1,5 +1,5 @@
 ###############
-# Note that all the data resources rely on the spoke
+# Note that all the data resources rely on the spoke having already been deployed
 ##############
 
 data "azurerm_virtual_network" "vnet" {
@@ -12,11 +12,6 @@ data "azurerm_subnet" "subnet" {
   name                 = each.key
   virtual_network_name = var.vnet_name
   resource_group_name  = var.resource_group_name
-}
-
-
-data "azurerm_resource_group" "group" {
-  name = var.resource_group_name
 }
 
 data "azurerm_key_vault" "key_vault" {
@@ -50,10 +45,5 @@ data "azurerm_backup_policy_vm" "VAULT_POLICY" {
 
 data "azurerm_storage_account" "BOOT_DIAG" {
   name                = var.diag_storage_name
-  resource_group_name = var.resource_group_name
-}
-
-data "azurerm_automation_account" "automationaccount" {
-  name                = var.automation_account_name
   resource_group_name = var.resource_group_name
 }

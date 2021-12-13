@@ -25,7 +25,7 @@ resource "azurerm_mssql_server" "sql_server" {
 }
 
 resource "azurerm_mssql_elasticpool" "elastic_pool" {
-  name                = "test-epool"
+  name                = var.elastic_pool_name
   resource_group_name = var.resource_group_name
   location            = var.location
   server_name         = azurerm_mssql_server.sql_server.name
@@ -43,6 +43,10 @@ resource "azurerm_mssql_elasticpool" "elastic_pool" {
     max_capacity = 20
   }
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [license_type] # For some reason this keeps popping up as a change even though it's the same value
+  }
 }
 
 resource "azurerm_mssql_database" "databases" {

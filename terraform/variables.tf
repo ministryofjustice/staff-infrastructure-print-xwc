@@ -3,6 +3,32 @@ variable "automation_account_name" {
   type = string
 }
 
+variable "cloud_agent_vm_details" {
+  type = map(object({
+    availability_zone = list(string),
+    nic = object({
+      subnet     = string
+      ip_address = string
+    }),
+    load_balancer = object({
+      name       = string
+      ip_address = string
+    }),
+    storage_data_disk = object({
+      type = string
+      size = string
+    })
+    tag_update_class = string,
+    os_disk_type     = string,
+    vm_size          = string
+  }))
+  default = {}
+}
+variable "elastic_pool_name" {
+  type        = string
+  description = "Name of the elastic pool"
+}
+
 variable "location" {
   description = "Deployment location"
   type        = string
@@ -85,7 +111,7 @@ variable "subscription_id" {
   description = "Spoke subscription id"
 }
 
-variable "vm_details" {
+variable "device_manager_vm_details" {
   type = map(object({
     availability_zone = list(string),
     nic = object({
@@ -148,4 +174,9 @@ variable "sql_server_name" {
 variable "private_link_subnet" {
   type        = string
   description = "I'm struggling to get this from the existing information so going down the easy route, at least for now"
+}
+
+variable "update_schedule_name" {
+  type=string
+  default ="somethingorother"
 }

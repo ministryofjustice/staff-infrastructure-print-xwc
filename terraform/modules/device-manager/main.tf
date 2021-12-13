@@ -2,8 +2,8 @@
 resource "azurerm_network_interface" "NIC" {
   for_each            = var.vm_details
   name                = "nic1-${each.key}"
-  location            = data.azurerm_resource_group.group.location
-  resource_group_name = data.azurerm_resource_group.group.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
   ip_configuration {
     name                          = "ipconfig1"
     subnet_id                     = data.azurerm_subnet.subnet[each.value.nic.subnet].id
@@ -19,8 +19,8 @@ resource "azurerm_network_interface" "NIC" {
 resource "azurerm_virtual_machine" "VM" {
   for_each              = var.vm_details
   name                  = each.key
-  location              = data.azurerm_resource_group.group.location
-  resource_group_name   = data.azurerm_resource_group.group.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
   network_interface_ids = [azurerm_network_interface.NIC[each.key].id]
   vm_size               = each.value.vm_size
   license_type          = var.license_type
@@ -141,38 +141,11 @@ resource "azurerm_virtual_machine_extension" "login_for_windows" {
 }
 
 
-# # Backup recovery services
-# resource "azurerm_backup_protected_vm" "VM_VAULT" {
-#   for_each = var.vm_details
-#   resource_group_name = var.resource_group_name
-#   recovery_vault_name = var.recovery_vault_name
-#   backup_policy_id    = data.azurerm_backup_policy_vm.VAULT_POLICY.id
-#   source_vm_id        = azurerm_virtual_machine.VM[each.key].id
-#   depends_on          = [azurerm_virtual_machine.VM, azurerm_virtual_machine_extension.AVEXT, azurerm_virtual_machine_extension.OMSAGENT]
-#}
-
-# resource "azurerm_role_assignment" "this" {
-#   for_each = var.vm_details
-#   scope                = data.azurerm_resource_group.group.id
-#   role_definition_name = "Owner"
-#   principal_id         = azurerm_virtual_machine.VM[each.key].identity.0.principal_id
-# }
-
-# --------------------------------------------------------------------------------------------------------------
-# Create Patch Schedule
-# --------------------------------------------------------------------------------------------------------------
-
-# module "windows-weekly-updates-1" {
-#   source                     = "../../../modules/terraform-azurerm-updateschedules"
-#   name                       = "${var.environment}-Windows-${var.subspoke}${var.suffix}"
-#   resource_group_name        = data.azurerm_resource_group.group.name
-#   azurerm_automation_account = data.azurerm_automation_account.automationaccount.name
-#   operatingSystem            = "Windows"
-#   scope                      = var.subscription_id
-#   timeZone                   = "UTC"
-#   startTime                  = "${local.update_date}T${local.update_time}:00+02:00"
-#   weekDays                   = ["Saturday"]
-#   occurrence                 = var.occurrence
-#   TagUpdateClass             = var.TagUpdateClass
-# }
-
+# Backup recovery services
+resource "azurerm_backup_protected_vm" "VM_VAULT" {
+  for_each = var.vm_details
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = var.recovery_vault_name
+  backup_policy_id    = data.azurerm_backup_policy_vm.VAULT_POLICY.id
+  source_vm_id        = azurerm_virtual_machine.VM[each.key].id
+}
