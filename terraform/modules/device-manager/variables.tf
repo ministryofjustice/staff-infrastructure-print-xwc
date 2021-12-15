@@ -23,7 +23,7 @@ variable "diag_storage_name" {
 }
 
 variable "elastic_pool_name" {
-  type = string
+  type        = string
   description = "Name of the elastic pool"
 }
 
