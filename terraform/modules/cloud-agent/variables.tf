@@ -33,9 +33,9 @@ variable "location" {
   type        = string
 }
 
-variable "load_balancer_rule_port"{
-  type = number
-  default = 3389 #This needs changing at some point to 443
+variable "load_balancer_rule_port" {
+  type        = number
+  default     = 3389 #This needs changing at some point to 443
   description = "Port that will be load balanced. There is a single rule thus a single port"
 }
 
@@ -70,8 +70,8 @@ variable "storage_image_reference" {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
     sku       = "2019-datacenter-gensecond"
-    version = "latest"
-    }
+    version   = "latest"
+  }
 }
 
 variable "tags" {
@@ -91,9 +91,9 @@ variable "vm_details" {
       subnet     = string
       ip_address = string
     }),
-    load_balancer=object({
-      name = string
-      ip_address= string
+    load_balancer = object({
+      name       = string
+      ip_address = string
     }),
     storage_data_disk = object({
       type = string
