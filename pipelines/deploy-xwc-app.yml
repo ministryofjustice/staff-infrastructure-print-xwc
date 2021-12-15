@@ -19,6 +19,11 @@ variables:
 - group: 'github'
 - name: spokeName
   value: xwc
+- name: yamlenv
+  ${{ if eq(variables['Build.Reason'],'PullRequest') }}:
+    value: prod_noapproval
+  ${{ if ne(variables['Build.Reason'],'PullRequest') }}:
+    value: prod_approval
 
 
 stages:
@@ -57,5 +62,5 @@ stages:
     subscription_id: dc2ea4ec-a86d-435a-9940-70fe36030bff
     tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/prod'
-    yamlenv: "prod_approval"
+    yamlenv: $(yamlenv)
 
