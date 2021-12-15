@@ -1,8 +1,17 @@
+variable "admin_user" {
+  type        = string
+  description = "User admin name to RDP to Jump box"
+}
+
+variable "admin_password" {
+  type        = string
+  description = "User password to RDP to Jump Box"
+}
 
 variable "automation_account_name" {
   type = string
 }
-
+#TODO: Consider whether disk related stuff is needed
 variable "cloud_agent_vm_details" {
   type = map(object({
     availability_zone = list(string),
@@ -24,91 +33,10 @@ variable "cloud_agent_vm_details" {
   }))
   default = {}
 }
-variable "elastic_pool_name" {
-  type        = string
-  description = "Name of the elastic pool"
-}
 
-variable "location" {
-  description = "Deployment location"
-  type        = string
-}
-
-variable "resource_group_name" {
-  description = "Deployment resource group"
-  type        = string
-}
-
-variable "tags" {
-  type        = map(string)
-  description = "A map of tags to be applied"
-}
-
-variable "vnet_name" {
-  description = "VNET name"
-  type        = string
-}
-
-variable "key_vault_name" {
-  type        = string
-  description = "Key Vault name for disk encryption and local admin password"
-}
-
-
-variable "admin_user" {
-  type        = string
-  description = "User admin name to RDP to Jump box"
-}
-
-variable "admin_password" {
-  type        = string
-  description = "User password to RDP to Jump Box"
-}
-
-variable "oms_workspace_name" {
-  type        = string
-  description = "Workspace name"
-}
-
-variable "recovery_policy_name" {
-  type        = string
-  description = "RSV policy name"
-}
-
-variable "recovery_vault_name" {
-  type        = string
-  description = "RSV name"
-}
-
-
-variable "occurrence" {
-  description = "Integer for weekly occurrence"
-  type        = number
-}
-
-variable "weekDays" {
-  description = "List of days to run. One or namy of: Sunday, Monday, Tuesday, Wednesday, Thrusday, Friday, Saturday."
+variable "db_names" {
   type        = list(string)
-  default     = []
-}
-
-variable "diag_storage_name" {
-  type        = string
-  description = "Jump box diagnostic account"
-}
-
-
-variable "environment" {
-  #default = "dev"
-  description = "The Environment name, i.e dev, staging, qa, preprod, test, prod..."
-}
-
-variable "tenant_id" {
-  description = "Tenant id"
-}
-
-variable "subscription_id" {
-  description = "Spoke subscription id"
+  description = "A list, and you are not going to believe this, of database names"
 }
 
 variable "device_manager_vm_details" {
@@ -128,6 +56,63 @@ variable "device_manager_vm_details" {
   }))
 }
 
+variable "diag_storage_name" {
+  type        = string
+  description = "Jump box diagnostic account"
+}
+
+variable "elastic_pool_name" {
+  type        = string
+  description = "Name of the elastic pool"
+}
+
+variable "environment" {
+  default     = "xwc"
+  description = "this is actually the spoke name"
+}
+
+variable "key_vault_name" {
+  type        = string
+  description = "Key Vault name for disk encryption and local admin password"
+}
+
+variable "license_type" {
+  type        = string
+  default     = "Windows_Server"
+  description = "This sets the license_type for the vm. Default is hybrid."
+}
+
+variable "location" {
+  description = "Deployment location"
+  type        = string
+}
+
+variable "oms_workspace_name" {
+  type        = string
+  description = "Workspace name"
+}
+
+variable "private_link_subnet" {
+  type        = string
+  description = "I'm struggling to get this from the existing information so going down the easy route, at least for now"
+}
+
+
+variable "recovery_policy_name" {
+  type        = string
+  description = "RSV policy name"
+}
+
+variable "recovery_vault_name" {
+  type        = string
+  description = "RSV name"
+}
+
+variable "resource_group_name" {
+  description = "Deployment resource group"
+  type        = string
+}
+
 variable "storage_image_reference" {
   type = object({
     publisher = string
@@ -140,17 +125,6 @@ variable "storage_image_reference" {
     offer     = "WindowsServer"
     sku       = "2019-datacenter-gensecond"
   version = "latest" }
-}
-
-variable "license_type" {
-  type        = string
-  default     = "Windows_Server"
-  description = "This sets the license_type for the vm. Default is hybrid."
-}
-
-variable "db_names" {
-  type        = list(string)
-  description = "A list, and you are not going to believe this, of database names"
 }
 
 variable "sqldb_azuread_administrator" {
@@ -171,12 +145,20 @@ variable "sql_server_name" {
   description = "Will Also be stored in KV"
 }
 
-variable "private_link_subnet" {
-  type        = string
-  description = "I'm struggling to get this from the existing information so going down the easy route, at least for now"
+variable "subscription_id" {
+  description = "Spoke subscription id"
 }
 
-variable "update_schedule_name" {
-  type=string
-  default ="somethingorother"
+variable "tags" {
+  type        = map(string)
+  description = "A map of tags to be applied"
+}
+
+variable "tenant_id" {
+  description = "Tenant id"
+}
+
+variable "vnet_name" {
+  description = "VNET name"
+  type        = string
 }

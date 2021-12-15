@@ -1,5 +1,5 @@
 resource "random_password" "password" {
-  length           = 24
+  length           = 16
   min_lower        = 1
   min_numeric      = 1
   min_upper        = 1
@@ -10,13 +10,14 @@ resource "random_password" "password" {
 
 
 resource "azurerm_mssql_server" "sql_server" {
-  name                         = var.sql_server_name
-  resource_group_name          = var.resource_group_name
-  location                     = var.location
-  version                      = "12.0"
-  administrator_login          = var.sql_server_administrator
-  administrator_login_password = random_password.password.result
-  minimum_tls_version          = 1.2
+  name                          = var.sql_server_name
+  resource_group_name           = var.resource_group_name
+  location                      = var.location
+  version                       = "12.0"
+  administrator_login           = var.sql_server_administrator
+  administrator_login_password  = random_password.password.result
+  minimum_tls_version           = 1.2
+  public_network_access_enabled = false
   azuread_administrator {
     login_username = var.sqldb_azuread_administrator.username
     object_id      = var.sqldb_azuread_administrator.object_id

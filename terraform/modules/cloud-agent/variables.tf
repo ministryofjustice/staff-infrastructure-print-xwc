@@ -33,6 +33,12 @@ variable "location" {
   type        = string
 }
 
+variable "load_balancer_rule_port"{
+  type = number
+  default = 3389 #This needs changing at some point to 443
+  description = "Port that will be load balanced. There is a single rule thus a single port"
+}
+
 variable "oms_workspace_name" {
   type        = string
   description = "Workspace name"

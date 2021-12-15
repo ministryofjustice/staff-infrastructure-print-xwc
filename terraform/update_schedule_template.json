@@ -45,7 +45,7 @@
                     "advancedSchedule": {
                         "monthlyOccurrences": [
                         {
-                            "occurrence": "${occurrence}",
+                            "occurrence": "${week_of_the_month}",
                             "day": "${week_day}"
                         }
                         ]

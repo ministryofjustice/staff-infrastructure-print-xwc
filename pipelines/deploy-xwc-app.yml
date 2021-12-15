@@ -42,19 +42,20 @@ stages:
 
 - template: templates/template-terraform-deploy-stage.yml
   parameters:
-    backendAzureRmResourceGroupName: "rg-terraform-statefiles-001"
-    backendAzureRmStorageAccountName: "samojtfstate001"
+    backendAzureRmResourceGroupName: "rg-prod-tfstate-001"
+    backendAzureRmStorageAccountName: "samojtfstate003"
     backendAzureRmContainerName: "tfstate"
     backendAzureRmKey: "xwcapp.terraform.tfstate"
     backendServiceArm:
+    dependsOn: ["dev"]
     deployFlag: true
     environmentName: prod
     githubPat: $(GITHUB_PAT)
     stageName: "prod"
     stageDisplayName: prod
     spokeName: ${{ variables.spokeName }}
-    subscription_id:
-    tenant_id:
+    subscription_id: dc2ea4ec-a86d-435a-9940-70fe36030bff
+    tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/prod'
     yamlenv: "prod_approval"
 

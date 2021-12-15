@@ -47,7 +47,7 @@ resource "azurerm_virtual_machine" "VM" {
   }
 
   storage_data_disk {
-    name              = format("data1-%s", each.key)
+    name              = format("data-%s", each.key)
     create_option     = "Empty"
     lun               = 0
     disk_size_gb      = each.value.storage_data_disk.size

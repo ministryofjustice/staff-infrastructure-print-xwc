@@ -26,18 +26,18 @@ resource "azurerm_lb_probe" "health_probe" {
   for_each = local.load_balancers
   resource_group_name            = var.resource_group_name
   loadbalancer_id                = azurerm_lb.load_balancer[each.key].id
-  name                = "rule-3389-${each.key}"
-  port                = 3389
+  name                = "rule-${var.load_balancer_rule_port}-${each.key}"
+  port                = var.load_balancer_rule_port
 }
 
 resource "azurerm_lb_rule" "loadbalancing_rule" {
   for_each = local.load_balancers
   resource_group_name            = var.resource_group_name
   loadbalancer_id                = azurerm_lb.load_balancer[each.key].id
-  name                           = "rule-3389-${each.key}"
+  name                           = "rule-${var.load_balancer_rule_port}-${each.key}"
   protocol                       = "Tcp"
-  frontend_port                  = 3389
-  backend_port                   = 3389
+  frontend_port                  = var.load_balancer_rule_port
+  backend_port                   = var.load_balancer_rule_port
   frontend_ip_configuration_name = "fe-${each.key}"
   probe_id = azurerm_lb_probe.health_probe[each.key].id
   backend_address_pool_ids = [azurerm_lb_backend_address_pool.backend_pool[each.key].id]
