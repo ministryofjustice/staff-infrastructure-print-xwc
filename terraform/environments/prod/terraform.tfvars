@@ -350,7 +350,7 @@ storage_image_reference = {
   sku       = "2019-datacenter-gensecond"
   version   = "latest"
 }
-subscription_id = "4b068872-d9f3-41bc-9c34-ffac17cf96d6"
+subscription_id = "dc2ea4ec-a86d-435a-9940-70fe36030bff"
 tags = {
   ApplicationName  = "VelocityLandingZone"
   BusinessUnit     = "MOJ"
@@ -360,5 +360,5 @@ tags = {
   ProjectStartDate = "05102020"
   RequesterName    = "rob.ashworth@justice.gov.uk"
 }
-tenant_id = "0bb413d7-160d-4839-868a-f3d46537f6af"
+tenant_id = "c6874728-71e6-41fe-a9e1-2e8c36776ad8"
 vnet_name = "vnet-xwc-core-001"
