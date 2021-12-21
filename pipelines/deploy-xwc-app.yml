@@ -16,14 +16,14 @@ pr:
     - yaml-templates
 
 variables:
-- group: 'github'
+- group: 'secrets'
 - name: spokeName
   value: xwc
-- name: yamlenv
+- name: deployFlag # We don't want the Prod stage running twice during a PR
   ${{ if eq(variables['Build.Reason'],'PullRequest') }}:
-    value: prod_noapproval
+    value: false
   ${{ if ne(variables['Build.Reason'],'PullRequest') }}:
-    value: prod_approval
+    value: true
 
 
 stages:
@@ -52,15 +52,32 @@ stages:
     backendAzureRmContainerName: "tfstate"
     backendAzureRmKey: "xwcapp.terraform.tfstate"
     backendServiceArm:
-    dependsOn: ["dev"]
-    deployFlag: true
+    deployFlag: $(deployFlag)
     environmentName: prod
     githubPat: $(GITHUB_PAT)
-    stageName: "prod"
-    stageDisplayName: prod
+    runApply: false
+    stageName: prodplan
+    stageDisplayName: Prod Plan
     spokeName: ${{ variables.spokeName }}
     subscription_id: dc2ea4ec-a86d-435a-9940-70fe36030bff
     tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/prod'
-    yamlenv: $(yamlenv)
+    yamlenv: prod_noapproval
 
+- template: templates/template-terraform-deploy-stage.yml
+  parameters:
+    backendAzureRmResourceGroupName: "rg-prod-tfstate-001"
+    backendAzureRmStorageAccountName: "samojtfstate003"
+    backendAzureRmContainerName: "tfstate"
+    backendAzureRmKey: "xwcapp.terraform.tfstate"
+    backendServiceArm:
+    deployFlag: true
+    environmentName: prod
+    githubPat: $(GITHUB_PAT)
+    stageName: prod
+    stageDisplayName: Prod Apply
+    spokeName: ${{ variables.spokeName }}
+    subscription_id: dc2ea4ec-a86d-435a-9940-70fe36030bff
+    tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/prod'
+    yamlenv: prod_approval
