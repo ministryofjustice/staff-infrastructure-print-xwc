@@ -162,7 +162,7 @@ stages:
                 targetType: filePath
                 filePath: $(System.DefaultWorkingDirectory)/scripts/AddGitHubPrComment.ps1
                 pwsh: true
-                arguments: "-pr $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER -buildId $env:BUILD_BUILDID -token $env:PAT -inputFile $env:SYSTEM_STAGENAME -stageName $env:SYSTEM_STAGENAME -environment ${{ parameters.environmentName}} -spokeName ${{ parameters.spokeName }} -isScan"
+                arguments: "-pr $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER -buildId $env:BUILD_BUILDID -token $env:PAT -inputFile $env:SYSTEM_STAGENAME -stageName $env:SYSTEM_STAGENAME -environment ${{ parameters.environmentName}} -isScan"
                 workingDirectory: ${{ parameters.workingDirectory }}
 
             - task: TerraformCLI@0
