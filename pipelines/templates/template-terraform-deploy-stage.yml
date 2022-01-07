@@ -118,7 +118,7 @@ stages:
                 targetType: filePath
                 filePath: $(System.DefaultWorkingDirectory)/scripts/AddGitHubPrComment.ps1
                 pwsh: true
-                arguments: "-pr $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER -buildId $env:BUILD_BUILDID -token $env:PAT -inputFile ${{ parameters.backendAzureRmKey }} -stageName $env:SYSTEM_STAGENAME -exitCode $(TERRAFORM_LAST_EXITCODE) -environment ${{ parameters.environmentName}} -spokeName ${{ parameters.spokeName }} -isPlan"
+                arguments: "-pr $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER -buildId $env:BUILD_BUILDID -token $env:PAT -inputFile ${{ parameters.backendAzureRmKey }} -stageName $env:SYSTEM_STAGENAME -exitCode $(TERRAFORM_LAST_EXITCODE) -environment ${{ parameters.environmentName}} -isPlan"
                 workingDirectory: ${{ parameters.workingDirectory }}
 
             - task: Bash@3
