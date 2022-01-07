@@ -38,12 +38,13 @@ variables:
 stages:
 - template: templates/template-terraform-deploy-stage.yml
   parameters:
-    backendAzureRmResourceGroupName: "rg-terraform-statefiles-001"
-    backendAzureRmStorageAccountName: "samojtfstate001"
+    backendAzureRmResourceGroupName: "rg-devl-tfstate-001"
+    backendAzureRmStorageAccountName: "stmojtfstate001"
     backendAzureRmContainerName: "tfstate"
     backendAzureRmKey: "xwcapp.terraform.tfstate"
     backendServiceArm: scDevXWC
     deployFlag: true
+    ensureBackend: true
     environmentName: dev
     githubPat: $(GITHUB_PAT)
     stageName: "dev"
@@ -58,11 +59,12 @@ stages:
 # - template: templates/template-terraform-deploy-stage.yml
 #   parameters:
 #     backendAzureRmResourceGroupName: "rg-prod-tfstate-001"
-#     backendAzureRmStorageAccountName: "samojtfstate003"
+#     backendAzureRmStorageAccountName: "stmojtfstate003"
 #     backendAzureRmContainerName: "tfstate"
 #     backendAzureRmKey: "xwcapp.terraform.tfstate"
 #     backendServiceArm: scProdXWC
 #     deployFlag: $(deployFlag)
+#     ensureBackend: true
 #     environmentName: prod
 #     githubPat: $(GITHUB_PAT)
 #     runApply: $(runApply)
