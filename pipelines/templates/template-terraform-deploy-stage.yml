@@ -17,6 +17,7 @@ parameters:
   subscription_id: ''
   tenant_id: ''
   terraformOperation: 'plan'
+  terraformVersion: '1.0.7'
   workingDirectory: ''
   vmImage: 'ubuntu-20.04'
   yamlenv: ''
@@ -39,9 +40,9 @@ stages:
             steps:
             - checkout: self
             - task: TerraformInstaller@0
-              displayName: install Terraform v0.13.3
+              displayName: install Terraform ${{parameters.terraformVersion}}
               inputs:
-                terraformVersion: '0.13.3'
+                terraformVersion: ${{parameters.terraformVersion}}
 
             - task: TerraformCLI@0
               displayName: terraform init ${{ parameters.stageDisplayName }}
