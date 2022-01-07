@@ -38,8 +38,8 @@ variables:
 stages:
 - template: templates/template-terraform-deploy-stage.yml
   parameters:
-    backendAzureRmResourceGroupName: "rg-devl-tfstate-001"
-    backendAzureRmStorageAccountName: "stmojtfstate001"
+    backendAzureRmResourceGroupName: "rg-xwc-core-001"
+    backendAzureRmStorageAccountName: "stxwctfstate001"
     backendAzureRmContainerName: "tfstate"
     backendAzureRmKey: "xwcapp.terraform.tfstate"
     backendServiceArm: scDevXWC
@@ -59,7 +59,7 @@ stages:
 # - template: templates/template-terraform-deploy-stage.yml
 #   parameters:
 #     backendAzureRmResourceGroupName: "rg-prod-tfstate-001"
-#     backendAzureRmStorageAccountName: "stmojtfstate003"
+#     backendAzureRmStorageAccountName: "stxwctfstate003"
 #     backendAzureRmContainerName: "tfstate"
 #     backendAzureRmKey: "xwcapp.terraform.tfstate"
 #     backendServiceArm: scProdXWC
