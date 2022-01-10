@@ -48,7 +48,6 @@ stages:
 #     yamlenv: dev_noapproval
 
 - stage: Test
-  dependsOn: dev
   jobs:
     - job: Test
       steps:
