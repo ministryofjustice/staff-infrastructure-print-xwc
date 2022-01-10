@@ -29,26 +29,8 @@ stages:
   pool:
     vmImage: ${{parameters.vmImage}}
   jobs:
-  - job: GetdeployFlag
-    displayName: GetdeployFlag Value
-    steps:
-    - task: PowerShell@2
-      displayName: DeployFlag
-      inputs:
-        targetType: inline
-        pwsh: true
-        script: |
-          echo "##vso[task.setvariable variable=deploy;isOutput=true]${{parameters.deployFlag}}"
-    - task: PowerShell@2
-      displayName: DeployFlag
-      inputs:
-        targetType: inline
-        pwsh: true
-        script: |
-          echo "deploy"
-          echo "${{variables.deploy}}"
   - deployment: Terraform_Deploy
-    condition: and(succeeded(), eq(variables['deploy'], true))
+    condition: and(succeeded(), eq('${{ parameters.deployFlag }}', true))
     displayName: Terraform Init, Plan & Apply
     environment: ${{ parameters.yamlenv }}
     strategy:

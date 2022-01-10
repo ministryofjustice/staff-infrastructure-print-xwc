@@ -21,16 +21,6 @@ variables:
 - group: 'secrets'
 - name: spokeName
   value: xwc
-  #TODO display plan that will be applied somewhere: Teams, Slack
-  #These variables are used to control how the stages run.
-  # IF Pipeline triggered via PR, we run prod stage only to get the plan and this will be posted to github
-  # for any other trigger, we run the first stage (prod plan) to display the plan, only in ADO for now and then have another stage (prod) that will apply that plan, note that both will need approvals to allow control of when they get applied
-  # This should hopefully allow more confidence in the plan being correct before applying.
-- name: deployFlag
-  ${{ if eq(variables['Build.Reason'],'PullRequest') }}:
-    value: false
-  ${{ if ne(variables['Build.Reason'],'PullRequest') }}:
-    value: true
 - name: prodYamlEnv
   ${{ if eq(variables['Build.Reason'],'PullRequest') }}:
      value: prod_noapproval
@@ -56,27 +46,6 @@ stages:
     tenant_id: 0bb413d7-160d-4839-868a-f3d46537f6af
     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/dev'
     yamlenv: dev_noapproval
-
-- template: templates/template-terraform-deploy-stage.yml
-  parameters:
-    backendAzureRmResourceGroupName: "rg-prod-tfstate-001"
-    backendAzureRmStorageAccountName: "stxwctfstate003"
-    backendAzureRmContainerName: "tfstate"
-    backendAzureRmKey: "xwcapp.terraform.tfstate"
-    backendServiceArm: scProdXWC
-    dependsOn: ["dev"]
-    deployFlag: $(deployFlag)
-    ensureBackend: true
-    environmentName: prod
-    githubPat: $(GITHUB_PAT)
-    runApply: $(runApply)
-    stageName: prodplan
-    stageDisplayName: Prod Display Plan
-    spokeName: ${{ variables.spokeName }}
-    subscription_id: 876eef88-ec3d-47db-b101-ec6f9daefb65
-    tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
-    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/prod'
-    yamlenv: $(prodYamlEnv)
 
 - template: templates/template-terraform-deploy-stage.yml
   parameters:
