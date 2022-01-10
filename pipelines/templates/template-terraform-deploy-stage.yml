@@ -1,0 +1,195 @@
+# parameters values will be passed from the parent/childparent yaml template.
+parameters:
+  backendAzureRmContainerName: ''
+  backendAzureRmKey: ''
+  backendAzureRmResourceGroupName: ''
+  backendAzureRmStorageAccountName: ''
+  backendServiceArm: ''
+  deployFlag: false
+  dependsOn: []
+  environmentName: '' # e.g. dev, pre-prod, prod
+  githubPAT: ''
+  runApply: 'true' # I think that this is probably the easiest, should that read laziest?, way of catering to the future, namely new spokes, without having to modify all existing pipelines.
+  secureVarsFile: ''
+  spokeName: '' # e.g. hub, a360, etc ..
+  stageDisplayName: ''
+  stageName: ''
+  subscription_id: ''
+  tenant_id: ''
+  terraformOperation: 'plan'
+  terraformVersion: '1.0.7'
+  workingDirectory: ''
+  vmImage: 'ubuntu-20.04'
+  yamlenv: ''
+
+stages:
+- stage: ${{ parameters.stageName }}
+  displayName: ${{ parameters.stageDisplayName }}
+  dependsOn: ${{ parameters.dependsOn  }}
+  pool:
+    vmImage: ${{parameters.vmImage}}
+  jobs:
+  - deployment: Terraform_Deploy
+    condition: and(succeeded(), eq('${{ parameters.deployFlag }}', true))
+    displayName: Terraform Init, Plan & Apply
+    environment: ${{ parameters.yamlenv }}
+    strategy:
+        # default deployment strategy
+        runOnce:
+          deploy:
+            steps:
+            - checkout: self
+            - task: TerraformInstaller@0
+              displayName: install Terraform ${{parameters.terraformVersion}}
+              inputs:
+                terraformVersion: ${{parameters.terraformVersion}}
+
+            - task: TerraformCLI@0
+              displayName: terraform init ${{ parameters.stageDisplayName }}
+              inputs:
+                command: "init"
+                workingDirectory: ${{ parameters.workingDirectory }}
+                backendType: "azurerm"
+                backendServiceArm: ${{ parameters.backendServiceArm }}
+                backendAzureRmResourceGroupName: ${{ parameters.backendAzureRmResourceGroupName }}
+                backendAzureRmStorageAccountName: ${{ parameters.backendAzureRmStorageAccountName }}
+                backendAzureRmContainerName: ${{ parameters.backendAzureRmContainerName }}
+                backendAzureRmKey: ${{ parameters.backendAzureRmKey }}
+
+            - task: TerraformCLI@0
+              displayName: terraform validate ${{ parameters.stageDisplayName }}
+              inputs:
+                command: 'validate'
+                provider: 'azurerm'
+                workingDirectory: ${{ parameters.workingDirectory }}
+                environmentServiceName: ${{ parameters.backendServiceArm }}
+
+            - task: TerraformCLI@0
+              displayName: terraform refresh ${{ parameters.stageDisplayName }}
+              condition: and(succeeded(), eq('${{parameters.secureVarsFile}}',''))
+              inputs:
+                command: 'refresh'
+                provider: 'azurerm'
+                workingDirectory: ${{ parameters.workingDirectory }}
+                commandOptions: '-var environment=${{ parameters.spokeName }} -var tenant_id=${{ parameters.tenant_id }} -var subscription_id=${{ parameters.subscription_id }} -no-color'
+                environmentServiceName: ${{ parameters.backendServiceArm }}
+
+            - task: TerraformCLI@0
+              displayName: terraform refresh ${{ parameters.stageDisplayName }} sensitive Vars
+              condition: and(succeeded(), not(eq('${{parameters.secureVarsFile}}','')))
+              inputs:
+                command: 'refresh'
+                provider: 'azurerm'
+                secureVarsFile: ${{ parameters.secureVarsFile}}
+                workingDirectory: ${{ parameters.workingDirectory }}
+                commandOptions: '-var environment=${{ parameters.spokeName }} -var tenant_id=${{ parameters.tenant_id }} -var subscription_id=${{ parameters.subscription_id }} -no-color'
+                environmentServiceName: ${{ parameters.backendServiceArm }}
+
+
+            - task: TerraformCLI@0
+              displayName: terraform plan ${{ parameters.stageDisplayName }}
+              condition: and(succeeded(), eq('${{parameters.secureVarsFile}}',''))
+              inputs:
+                command: 'plan'
+                provider: 'azurerm'
+                workingDirectory: ${{ parameters.workingDirectory }}
+                commandOptions: '-var environment=${{ parameters.spokeName }} -refresh=false -var tenant_id=${{ parameters.tenant_id }} -var subscription_id=${{ parameters.subscription_id }} -out=${{ parameters.backendAzureRmKey }} -input=false -no-color -detailed-exitcode'
+                environmentServiceName: ${{ parameters.backendServiceArm }}
+                publishPlanResults: ${{ parameters.stageName }}
+
+            - task: TerraformCLI@0
+              displayName: terraform plan ${{ parameters.stageDisplayName }} sensitive Vars
+              condition: and(succeeded(), not(eq('${{parameters.secureVarsFile}}','')))
+              inputs:
+                command: 'plan'
+                provider: 'azurerm'
+                secureVarsFile: ${{ parameters.secureVarsFile}}
+                workingDirectory: ${{ parameters.workingDirectory }}
+                commandOptions: '-var environment=${{ parameters.spokeName }} -refresh=false -var tenant_id=${{ parameters.tenant_id }} -var subscription_id=${{ parameters.subscription_id }} -out=${{ parameters.backendAzureRmKey }} -input=false -no-color -detailed-exitcode'
+                environmentServiceName: ${{ parameters.backendServiceArm }}
+                publishPlanResults: ${{ parameters.stageName }}
+
+            - task: PowerShell@2
+              displayName: Post Plan to Github
+              condition: and(succeeded(), eq(variables['Build.Reason'],'PullRequest'), not(eq(variables['applyOnPr'], 'true')), eq(${{parameters.runApply}},'true'))
+              env:
+                PAT : ${{ parameters.githubPAT}}
+              inputs:
+                targetType: filePath
+                filePath: $(System.DefaultWorkingDirectory)/scripts/AddGitHubPrComment.ps1
+                pwsh: true
+                arguments: "-pr $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER -buildId $env:BUILD_BUILDID -token $env:PAT -inputFile ${{ parameters.backendAzureRmKey }} -stageName $env:SYSTEM_STAGENAME -exitCode $(TERRAFORM_LAST_EXITCODE) -environment ${{ parameters.environmentName}} -isPlan"
+                workingDirectory: ${{ parameters.workingDirectory }}
+
+            - task: Bash@3
+              displayName: Checkov Scan
+              condition: and(succeeded(), eq(variables['Build.Reason'],'PullRequest'), not(eq(variables['applyOnPr'], 'true')), eq(${{parameters.runApply}},'true'))
+              inputs:
+                workingDirectory: ${{ parameters.workingDirectory }}
+                targetType: inline
+                script: |
+                  #This the recommendation from the checkov gang for user friendly output. Alas it doesn't quite seem to work, so displaying the plan for reference in the task below not sure how useful this will be
+                  terraform show -json ${{parameters.backendAzureRmKey}} -no-color | jq '.' > tf.json
+                  docker run --tty --volume `pwd`:/tf bridgecrew/checkov -f /tf/tf.json -o junitxml > $SYSTEM_STAGENAME.xml
+                  #There are some trailing ascii colour codes that the sed script gets rid of
+                  sed -i 's/\x1b\[[0-9;]*m//g' $SYSTEM_STAGENAME.xml
+
+            - task: Bash@3
+              displayName: Checkov Scan - Display Plan
+              condition: and(succeeded(), eq(variables['Build.Reason'],'PullRequest'), not(eq(variables['applyOnPr'], 'true')), eq(${{parameters.runApply}},'true'))
+              inputs:
+                workingDirectory: ${{ parameters.workingDirectory }}
+                targetType: inline
+                script: |
+                  #checkov should provide more info about what is actually going on but it seems that I can only get it to show the lines of the plan so displaying it here for reference.
+                  cat -n tf.json
+
+            - task: PublishTestResults@2
+              displayName: Publish Checkov Scan Results
+              condition: and(succeeded(), eq(variables['Build.Reason'],'PullRequest'), not(eq(variables['applyOnPr'], 'true')), eq(${{parameters.runApply}},'true'))
+              inputs:
+                  testResultsFormat: 'JUnit'
+                  searchFolder: ${{ parameters.workingDirectory }}
+                  testResultsFiles: '*.xml'
+                  failTaskOnFailedTests: false
+
+            - task: PowerShell@2
+              displayName: Post Scan Results to Github
+              condition: and(succeeded(), eq(variables['Build.Reason'],'PullRequest'), not(eq(variables['applyOnPr'], 'true')), eq(${{parameters.runApply}},'true'))
+              env:
+                PAT : ${{ parameters.githubPAT}}
+              inputs:
+                targetType: filePath
+                filePath: $(System.DefaultWorkingDirectory)/scripts/AddGitHubPrComment.ps1
+                pwsh: true
+                arguments: "-pr $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER -buildId $env:BUILD_BUILDID -token $env:PAT -inputFile $env:SYSTEM_STAGENAME -stageName $env:SYSTEM_STAGENAME -environment ${{ parameters.environmentName}} -isScan"
+                workingDirectory: ${{ parameters.workingDirectory }}
+
+            - task: TerraformCLI@0
+              displayName: terraform apply ${{ parameters.stageDisplayName }}
+              #Apply will occur as follows:
+              # if applyOnPr is true - this is for validation of modules
+              # if the build is a CI (InvidivualCI or BatchedCI) or a Schedule build and there are changes to apply and runApply is set to true (this is the default)
+              # if it's a manual build and terraformOperation is true
+              condition: and(succeeded(), or(eq(variables['applyOnPr'], 'true'), and(eq(${{parameters.runApply}},'true'), or(endsWith(variables['Build.Reason'],'CI'), eq(variables['Build.Reason'],'Schedule')), eq(variables['TERRAFORM_PLAN_HAS_CHANGES'],'true')),and(eq(variables['Build.Reason'],'Manual'), eq('${{parameters.terraformOperation}}', 'apply' )) ))
+              inputs:
+                command: 'apply'
+                provider: 'azurerm'
+                workingDirectory: ${{ parameters.workingDirectory }}
+                commandOptions: ${{ parameters.backendAzureRmKey }}
+                environmentServiceName: ${{ parameters.backendServiceArm }}
+
+            - task: AzureCLI@2
+              displayName: Release blob file lock if it exists
+              condition: canceled()
+              inputs:
+                azureSubscription: ${{ parameters.backendServiceArm }}
+                scriptType: 'pscore'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  # check blob file lock status, break lock if it is leased
+                  $blob = az storage blob show --account-name ${{ parameters.backendAzureRmStorageAccountName }} -c ${{ parameters.backendAzureRmContainerName }} --name ${{ parameters.backendAzureRmKey }}  | ConvertFrom-Json
+                  if ( (($blob.properties).lease).state -eq 'leased' )
+                  {
+                    az storage blob lease break --account-name ${{ parameters.backendAzureRmStorageAccountName }} -c ${{ parameters.backendAzureRmContainerName }} -b ${{ parameters.backendAzureRmKey }}
+                  }

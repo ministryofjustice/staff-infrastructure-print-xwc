@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "name": "${azurerm_automation_account}/${update_schedule_name}",
+            "type": "Microsoft.Automation/automationAccounts/softwareUpdateConfigurations",
+            "apiVersion": "2019-06-01",
+            "properties": {
+                "updateConfiguration": {
+                    "operatingSystem": "windows",
+                    "windows": {
+                        "excludedKbNumbers": [],
+                        "includedUpdateClassifications": "${windows_update_types}",
+                        "rebootSetting": "${reboot_setting}"
+                    },
+                    "duration": "PT${duration}H",
+                    "azureVirtualMachines": [],
+                    "nonAzureComputerNames": [],
+                    "targets": {
+                        "azureQueries": [
+                            {
+                                "scope": [
+                                "${scope}"
+                            ],
+                            "tagSettings": {
+                                "tags": {
+                                    "UpdateClass": [
+                                        "${tag_update_class}"
+                            ]
+                                },
+                                "filterOperator": "All"
+                            },
+                            "locations": []
+                        }
+                        ],
+                        "nonAzureQueries": []
+                    }
+                },
+                "scheduleInfo": {
+                    "frequency": "Month",
+                    "startTime": "${start_time}",
+                    "timeZone": "${time_zone}",
+                    "interval": "${interval}",
+                    "advancedSchedule": {
+                        "monthlyOccurrences": [
+                        {
+                            "occurrence": "${week_of_the_month}",
+                            "day": "${week_day}"
+                        }
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}
