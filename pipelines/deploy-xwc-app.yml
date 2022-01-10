@@ -4,16 +4,18 @@ trigger:
     - main
   paths:
     include:
+    - pipelines
+    - scripts
     - terraform
-    - yaml-templates
 pr:
   branches:
     include:
     - main
   paths:
     include:
+    - pipelines
+    - scripts
     - terraform
-    - yaml-templates
 
 variables:
 - group: 'secrets'
