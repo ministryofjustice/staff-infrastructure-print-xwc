@@ -55,13 +55,12 @@ stages:
     backendAzureRmKey: "xwcapp.terraform.tfstate"
     backendServiceArm: scProdXWC
     dependsOn: ["dev"]
-    deployFlag: $(deployFlag)
+    deployFlag: true
     ensureBackend: true
     environmentName: prod
     githubPat: $(GITHUB_PAT)
-    runApply: $(runApply)
     stageName: prod
-    stageDisplayName: Prod Apply
+    stageDisplayName: Prod
     spokeName: ${{ variables.spokeName }}
     subscription_id: 876eef88-ec3d-47db-b101-ec6f9daefb65
     tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
