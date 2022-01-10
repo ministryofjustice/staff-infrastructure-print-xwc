@@ -57,9 +57,7 @@ stages:
             scriptType: bash
             scriptLocation: 'inlineScript'
             inlineScript: |
-              az group create -l uksouth -n rg-prod-tfstate-001
-              az storage account create --name stxwctfstate003 --resource-group rg-prod-tfstate-001
-              conn=az storage account show-connection-string --name stxwctfstate003 --resource-group rg-prod-tfstate-001 -o tsv
+              conn=$(az storage account show-connection-string --name stxwctfstate003 --resource-group rg-prod-tfstate-001 -o tsv)
               az storage container create --name tfstate --connection-string $conn
 
 
