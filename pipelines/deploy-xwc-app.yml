@@ -54,7 +54,7 @@ stages:
     backendAzureRmContainerName: "tfstate"
     backendAzureRmKey: "xwcapp.terraform.tfstate"
     backendServiceArm: scProdXWC
-    dependsOn: ["prodplan"]
+    dependsOn: ["dev"]
     deployFlag: $(deployFlag)
     ensureBackend: true
     environmentName: prod
