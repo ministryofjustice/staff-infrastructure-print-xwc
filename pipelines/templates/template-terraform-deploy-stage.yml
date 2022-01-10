@@ -46,7 +46,7 @@ stages:
         pwsh: true
         script: |
           echo "deploy"
-          echo ${{variables.deploy}}
+          echo "${{variables.deploy}}"
   - deployment: Terraform_Deploy
     condition: and(succeeded(), eq(variables['deploy'], true))
     displayName: Terraform Init, Plan & Apply
