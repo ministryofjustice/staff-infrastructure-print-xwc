@@ -38,7 +38,7 @@ stages:
         targetType: inline
         pwsh: true
         script: |
-          echo "##vso[task.setvariable variable=deploy;isOutput=true]${{parameter.deployFlag}}"
+          echo "##vso[task.setvariable variable=deploy;isOutput=true]${{parameters.deployFlag}}"
     - task: PowerShell@2
       displayName: DeployFlag
       inputs:
