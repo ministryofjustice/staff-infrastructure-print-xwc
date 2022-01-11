@@ -308,7 +308,7 @@ device_manager_vm_details = {
     }
     nic = {
       subnet     = "snet-xwc-core-001"
-      ip_address = ""
+      ip_address = "10.192.30.33"
     }
     tag_update_class = "Gold1"
     os_disk_type     = "Premium_LRS"
