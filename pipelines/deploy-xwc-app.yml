@@ -4,36 +4,28 @@ trigger:
     - main
   paths:
     include:
+    - pipelines
+    - scripts
     - terraform
-    - yaml-templates
 pr:
   branches:
     include:
     - main
   paths:
     include:
+    - pipelines
+    - scripts
     - terraform
-    - yaml-templates
 
 variables:
 - group: 'secrets'
 - name: spokeName
   value: xwc
-- name: deployFlag # We don't want the Prod stage running twice during a PR
+- name: prodYamlEnv
   ${{ if eq(variables['Build.Reason'],'PullRequest') }}:
-    value: false
+     value: prod_noapproval
   ${{ if ne(variables['Build.Reason'],'PullRequest') }}:
-    value: true
-- name: prodYamlEnv # We don't want the Prod stage running twice during a PR
-  ${{ if eq(variables['Build.Reason'],'PullRequest') }}:
-    value: prod_noapproval
-  ${{ if ne(variables['Build.Reason'],'PullRequest') }}:
-    value: prod_approval
-- name: runApply # We don't want the Prod stage running twice during a PR
-  ${{ if eq(variables['Build.Reason'],'PullRequest') }}:
-    value: false
-  ${{ if ne(variables['Build.Reason'],'PullRequest') }}:
-    value: true
+     value: prod_approval
 
 stages:
 - template: templates/template-terraform-deploy-stage.yml
@@ -55,23 +47,22 @@ stages:
     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/dev'
     yamlenv: dev_noapproval
 
-    #Commented out until spoke is created in prod
-# - template: templates/template-terraform-deploy-stage.yml
-#   parameters:
-#     backendAzureRmResourceGroupName: "rg-prod-tfstate-001"
-#     backendAzureRmStorageAccountName: "stxwctfstate003"
-#     backendAzureRmContainerName: "tfstate"
-#     backendAzureRmKey: "xwcapp.terraform.tfstate"
-#     backendServiceArm: scProdXWC
-#     deployFlag: $(deployFlag)
-#     ensureBackend: true
-#     environmentName: prod
-#     githubPat: $(GITHUB_PAT)
-#     runApply: $(runApply)
-#     stageName: prod
-#     stageDisplayName: Prod Apply
-#     spokeName: ${{ variables.spokeName }}
-#     subscription_id: 876eef88-ec3d-47db-b101-ec6f9daefb65
-#     tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
-#     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/prod'
-#     yamlenv: $(prodYamlEnv)
+- template: templates/template-terraform-deploy-stage.yml
+  parameters:
+    backendAzureRmResourceGroupName: "rg-prod-tfstate-001"
+    backendAzureRmStorageAccountName: "stxwctfstate003"
+    backendAzureRmContainerName: "tfstate"
+    backendAzureRmKey: "xwcapp.terraform.tfstate"
+    backendServiceArm: scProdXWC
+    dependsOn: ["dev"]
+    deployFlag: true
+    ensureBackend: true
+    environmentName: prod
+    githubPat: $(GITHUB_PAT)
+    stageName: prod
+    stageDisplayName: Prod
+    spokeName: ${{ variables.spokeName }}
+    subscription_id: 876eef88-ec3d-47db-b101-ec6f9daefb65
+    tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/prod'
+    yamlenv: $(prodYamlEnv)
