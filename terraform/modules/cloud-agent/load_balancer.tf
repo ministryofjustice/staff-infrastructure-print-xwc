@@ -8,7 +8,7 @@ resource "azurerm_lb" "load_balancer" {
   for_each            = local.load_balancers
   name                = each.key
   location            = var.location
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.app_resource_group_name
   sku                 = "Standard"
 
   #TODO: Make this less  hacky
@@ -24,7 +24,7 @@ resource "azurerm_lb" "load_balancer" {
 
 resource "azurerm_lb_probe" "health_probe" {
   for_each            = local.load_balancers
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.app_resource_group_name
   loadbalancer_id     = azurerm_lb.load_balancer[each.key].id
   name                = "rule-${var.load_balancer_rule_port}-${each.key}"
   port                = var.load_balancer_rule_port
@@ -32,7 +32,7 @@ resource "azurerm_lb_probe" "health_probe" {
 
 resource "azurerm_lb_rule" "loadbalancing_rule" {
   for_each                       = local.load_balancers
-  resource_group_name            = var.resource_group_name
+  resource_group_name            = var.app_resource_group_name
   loadbalancer_id                = azurerm_lb.load_balancer[each.key].id
   name                           = "rule-${var.load_balancer_rule_port}-${each.key}"
   protocol                       = "Tcp"

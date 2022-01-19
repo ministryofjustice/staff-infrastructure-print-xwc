@@ -1,6 +1,8 @@
 admin_password          = "VMdefaultPassword"
 admin_user              = "VMdefaultUsername"
-automation_account_name = "auto-xwc-core-001"
+app_resource_group_name  = "rg-xwc-app-001"
+automation_account_name  = "auto-xwc-core-001"
+core_resource_group_name = "rg-xwc-core-001"
 cloud_agent_vm_details = {
   "vmxwcca01" = {
     availability_zone = ["1"]
@@ -338,7 +340,6 @@ oms_workspace_name   = "log-xwc-core-003"
 private_link_subnet  = "snet-xwc-core-001"
 recovery_policy_name = "Policy-3-Month-Backup"
 recovery_vault_name  = "rsv-xwc-core-001"
-resource_group_name  = "rg-xwc-core-001"
 sqldb_azuread_administrator = {
   username  = "Mojo-Azure-ManagementGroup-MoJ_Owner"
   object_id = "0484bc5c-7eb4-4e99-8ff6-a67b1afb34b2"

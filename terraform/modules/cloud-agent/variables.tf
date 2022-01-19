@@ -1,3 +1,4 @@
+
 variable "admin_user" {
   type        = string
   description = "User admin name to RDP to Jump box"
@@ -8,8 +9,17 @@ variable "admin_password" {
   description = "User password to RDP to Jump Box"
 }
 
+variable "app_resource_group_name" {
+  description = "Deployment resource group"
+  type        = string
+}
 variable "automation_account_name" {
   type = string
+}
+
+variable "core_resource_group_name" {
+  description = "Deployment resource group"
+  type        = string
 }
 
 variable "diag_storage_name" {
@@ -52,11 +62,6 @@ variable "recovery_policy_name" {
 variable "recovery_vault_name" {
   type        = string
   description = "RSV name"
-}
-
-variable "resource_group_name" {
-  description = "Deployment resource group"
-  type        = string
 }
 
 variable "storage_image_reference" {

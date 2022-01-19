@@ -8,10 +8,19 @@ variable "admin_password" {
   description = "User password to RDP to Jump Box"
 }
 
+variable "app_resource_group_name" {
+  description = "Deployment resource group"
+  type        = string
+}
+
 variable "automation_account_name" {
   type = string
 }
 
+variable "core_resource_group_name" {
+  description = "Deployment resource group"
+  type        = string
+}
 variable "db_names" {
   type        = list(string)
   description = "A list, and you are not going to believe this, of database names"
@@ -64,10 +73,6 @@ variable "recovery_vault_name" {
   description = "RSV name"
 }
 
-variable "resource_group_name" {
-  description = "Deployment resource group"
-  type        = string
-}
 variable "storage_image_reference" {
   type = object({
     publisher = string
