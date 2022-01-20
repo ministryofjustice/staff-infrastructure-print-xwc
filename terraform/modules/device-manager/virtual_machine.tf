@@ -3,7 +3,7 @@ resource "azurerm_network_interface" "NIC" {
   for_each            = var.vm_details
   name                = "nic1-${each.key}"
   location            = var.location
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.app_resource_group_name
   ip_configuration {
     name                          = "ipconfig1"
     subnet_id                     = data.azurerm_subnet.subnet[each.value.nic.subnet].id
@@ -20,7 +20,7 @@ resource "azurerm_virtual_machine" "VM" {
   for_each              = var.vm_details
   name                  = each.key
   location              = var.location
-  resource_group_name   = var.resource_group_name
+  resource_group_name   = var.app_resource_group_name
   network_interface_ids = [azurerm_network_interface.NIC[each.key].id]
   vm_size               = each.value.vm_size
   license_type          = var.license_type
@@ -144,7 +144,7 @@ resource "azurerm_virtual_machine_extension" "login_for_windows" {
 # Backup recovery services
 resource "azurerm_backup_protected_vm" "VM_VAULT" {
   for_each            = var.vm_details
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.app_resource_group_name
   recovery_vault_name = var.recovery_vault_name
   backup_policy_id    = data.azurerm_backup_policy_vm.VAULT_POLICY.id
   source_vm_id        = azurerm_virtual_machine.VM[each.key].id

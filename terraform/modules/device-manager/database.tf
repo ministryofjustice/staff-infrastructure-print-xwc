@@ -11,7 +11,7 @@ resource "random_password" "password" {
 
 resource "azurerm_mssql_server" "sql_server" {
   name                          = var.sql_server_name
-  resource_group_name           = var.resource_group_name
+  resource_group_name           = var.app_resource_group_name
   location                      = var.location
   version                       = "12.0"
   administrator_login           = var.sql_server_administrator
@@ -27,7 +27,7 @@ resource "azurerm_mssql_server" "sql_server" {
 
 resource "azurerm_mssql_elasticpool" "elastic_pool" {
   name                = var.elastic_pool_name
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.app_resource_group_name
   location            = var.location
   server_name         = azurerm_mssql_server.sql_server.name
   license_type        = "LicenseIncluded"
@@ -75,7 +75,7 @@ resource "azurerm_key_vault_secret" "password" {
 resource "azurerm_private_endpoint" "sql_private_endpoint" {
   name                = "pe-sql-${var.sql_server_name}"
   location            = var.location
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.app_resource_group_name
   subnet_id           = data.azurerm_subnet.subnet[var.private_link_subnet].id
   tags                = var.tags
   private_service_connection {
@@ -89,13 +89,13 @@ resource "azurerm_private_endpoint" "sql_private_endpoint" {
 
 resource "azurerm_private_dns_zone" "dns_zone" {
   name                = "privatelink.database.windows.net"
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.app_resource_group_name
   tags                = var.tags
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "private_dns_vnet_link" {
   name                  = data.azurerm_virtual_network.vnet.name
-  resource_group_name   = var.resource_group_name
+  resource_group_name   = var.app_resource_group_name
   private_dns_zone_name = azurerm_private_dns_zone.dns_zone.name
   virtual_network_id    = data.azurerm_virtual_network.vnet.id
   tags                  = var.tags
@@ -104,7 +104,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "private_dns_vnet_link"
 resource "azurerm_private_dns_a_record" "dns_zone" {
   name                = var.sql_server_name
   zone_name           = azurerm_private_dns_zone.dns_zone.name
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.app_resource_group_name
   ttl                 = 300
   records             = azurerm_private_endpoint.sql_private_endpoint.custom_dns_configs[0].ip_addresses
   tags                = var.tags

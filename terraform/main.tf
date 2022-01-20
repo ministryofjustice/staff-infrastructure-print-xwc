@@ -3,7 +3,9 @@ module "device-manager" {
 
   admin_user                  = var.admin_user
   admin_password              = var.admin_password
+  app_resource_group_name     = azurerm_resource_group.app.name
   automation_account_name     = var.automation_account_name
+  core_resource_group_name    = var.core_resource_group_name
   elastic_pool_name           = var.elastic_pool_name
   location                    = var.location
   key_vault_name              = var.key_vault_name
@@ -19,7 +21,6 @@ module "device-manager" {
   sql_server_administrator    = var.sql_server_administrator
   sql_server_name             = var.sql_server_name
   private_link_subnet         = var.private_link_subnet
-  resource_group_name         = var.resource_group_name
   tags                        = var.tags
   vnet_name                   = var.vnet_name
 }
@@ -28,21 +29,22 @@ module "device-manager" {
 module "cloud-agent" {
   source = "../../modules/cloud-agent"
 
-  admin_user              = var.admin_user
-  admin_password          = var.admin_password
-  automation_account_name = var.automation_account_name
-  diag_storage_name       = var.diag_storage_name
-  key_vault_name          = var.key_vault_name
-  license_type            = var.license_type
-  location                = var.location
-  oms_workspace_name      = var.oms_workspace_name
-  recovery_policy_name    = var.recovery_policy_name
-  recovery_vault_name     = var.recovery_vault_name
-  resource_group_name     = var.resource_group_name
-  storage_image_reference = var.storage_image_reference
-  tags                    = var.tags
-  vm_details              = var.cloud_agent_vm_details
-  vnet_name               = var.vnet_name
+  admin_user               = var.admin_user
+  admin_password           = var.admin_password
+  app_resource_group_name  = azurerm_resource_group.app.name
+  automation_account_name  = var.automation_account_name
+  core_resource_group_name = var.core_resource_group_name
+  diag_storage_name        = var.diag_storage_name
+  key_vault_name           = var.key_vault_name
+  license_type             = var.license_type
+  location                 = var.location
+  oms_workspace_name       = var.oms_workspace_name
+  recovery_policy_name     = var.recovery_policy_name
+  recovery_vault_name      = var.recovery_vault_name
+  storage_image_reference  = var.storage_image_reference
+  tags                     = var.tags
+  vm_details               = var.cloud_agent_vm_details
+  vnet_name                = var.vnet_name
 }
 
 locals {
@@ -54,7 +56,7 @@ locals {
     duration                   = 2 # Two hours
     interval                   = 1 # Once every month
     reboot_setting             = "IfRequired"
-    scope                      = data.azurerm_resource_group.group.id
+    scope                      = azurerm_resource_group.app.id
     start_time                 = "${local.update_date}T01:00:00Z"
     time_zone                  = "UTC"
     week_day                   = "Saturday"
@@ -105,14 +107,16 @@ resource "time_offset" "tomorrow" {
   offset_days = 1
 }
 
-data "azurerm_resource_group" "group" {
-  name = var.resource_group_name
+
+resource "azurerm_resource_group" "app" {
+  name     = var.app_resource_group_name
+  location = var.location
 }
 
 resource "azurerm_resource_group_template_deployment" "cloud_agent_update_schedule" {
   for_each            = { for schedule in local.schedule : schedule.update_schedule_name => schedule }
   name                = each.key
-  resource_group_name = var.resource_group_name
+  resource_group_name = var.core_resource_group_name
   deployment_mode     = "Incremental"
   template_content    = templatefile("./update_schedule_template.json", each.value)
 }
