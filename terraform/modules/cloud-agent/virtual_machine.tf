@@ -139,7 +139,7 @@ resource "azurerm_virtual_machine_extension" "login_for_windows" {
 # Backup recovery services
 resource "azurerm_backup_protected_vm" "VM_VAULT" {
   for_each            = var.vm_details
-  resource_group_name = var.app_resource_group_name
+  resource_group_name = var.core_resource_group_name
   recovery_vault_name = var.recovery_vault_name
   backup_policy_id    = data.azurerm_backup_policy_vm.VAULT_POLICY.id
   source_vm_id        = azurerm_virtual_machine.VM[each.key].id
