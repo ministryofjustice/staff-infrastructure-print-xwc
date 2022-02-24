@@ -41,7 +41,7 @@ resource "azurerm_lb_rule" "loadbalancing_rule" {
   frontend_ip_configuration_name = "fe-${each.key}"
   probe_id                       = azurerm_lb_probe.health_probe[each.key].id
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.backend_pool[each.key].id]
-  load_distribution              = "SourceIPProtocol"
+  load_distribution              = "SourceIP"
 }
 
 
