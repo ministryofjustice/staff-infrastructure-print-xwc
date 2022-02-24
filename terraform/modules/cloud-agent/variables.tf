@@ -45,7 +45,7 @@ variable "location" {
 
 variable "load_balancer_rule_port" {
   type        = number
-  default     = 3389 #This needs changing at some point to 443
+  default     = 433
   description = "Port that will be load balanced. There is a single rule thus a single port"
 }
 
