@@ -16,11 +16,16 @@ parameters:
   stageName: ''
   subscription_id: ''
   tenant_id: ''
-  terraformOperation: 'plan'
   terraformVersion: '1.0.7'
   workingDirectory: ''
   vmImage: 'ubuntu-20.04'
   yamlenv: ''
+  -name: terraformOperation
+    displayName: Terraform Operation
+    values:
+      - plan
+      - apply
+    default: plan
 
 stages:
 - stage: ${{ parameters.stageName }}
