@@ -7,7 +7,7 @@ resource "azurerm_network_interface" "NIC" {
   ip_configuration {
     name                          = "ipconfig1"
     subnet_id                     = data.azurerm_subnet.subnet[each.value.nic.subnet].id
-    private_ip_address_allocation = "static"
+    private_ip_address_allocation = "Static"
     private_ip_address            = each.value.nic.ip_address
   }
 
