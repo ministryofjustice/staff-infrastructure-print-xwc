@@ -351,7 +351,7 @@ storage_image_reference = {
   sku       = "2019-datacenter-gensecond"
   version   = "latest"
 }
-subscription_id = "dc2ea4ec-a86d-435a-9940-70fe36030bff"
+subscription_id = "876eef88-ec3d-47db-b101-ec6f9daefb65"
 tags = {
   ApplicationName  = "VelocityLandingZone"
   BusinessUnit     = "MOJ"
