@@ -39,12 +39,12 @@ stages:
           deploy:
             steps:
             - checkout: self
-            - task: TerraformInstaller@0
+            - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@1
               displayName: install Terraform ${{parameters.terraformVersion}}
               inputs:
                 terraformVersion: ${{parameters.terraformVersion}}
 
-            - task: TerraformCLI@0
+            - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
               displayName: terraform init ${{ parameters.stageDisplayName }}
               inputs:
                 command: "init"
@@ -56,7 +56,7 @@ stages:
                 backendAzureRmContainerName: ${{ parameters.backendAzureRmContainerName }}
                 backendAzureRmKey: ${{ parameters.backendAzureRmKey }}
 
-            - task: TerraformCLI@0
+            - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
               displayName: terraform validate ${{ parameters.stageDisplayName }}
               inputs:
                 command: 'validate'
@@ -64,7 +64,7 @@ stages:
                 workingDirectory: ${{ parameters.workingDirectory }}
                 environmentServiceName: ${{ parameters.backendServiceArm }}
 
-            - task: TerraformCLI@0
+            - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
               displayName: terraform refresh ${{ parameters.stageDisplayName }}
               condition: and(succeeded(), eq('${{parameters.secureVarsFile}}',''))
               inputs:
@@ -74,7 +74,7 @@ stages:
                 commandOptions: '-var environment=${{ parameters.spokeName }} -var tenant_id=${{ parameters.tenant_id }} -var subscription_id=${{ parameters.subscription_id }} -no-color'
                 environmentServiceName: ${{ parameters.backendServiceArm }}
 
-            - task: TerraformCLI@0
+            - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
               displayName: terraform refresh ${{ parameters.stageDisplayName }} sensitive Vars
               condition: and(succeeded(), not(eq('${{parameters.secureVarsFile}}','')))
               inputs:
@@ -86,7 +86,7 @@ stages:
                 environmentServiceName: ${{ parameters.backendServiceArm }}
 
 
-            - task: TerraformCLI@0
+            - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
               displayName: terraform plan ${{ parameters.stageDisplayName }}
               condition: and(succeeded(), eq('${{parameters.secureVarsFile}}',''))
               inputs:
@@ -97,7 +97,7 @@ stages:
                 environmentServiceName: ${{ parameters.backendServiceArm }}
                 publishPlanResults: ${{ parameters.stageName }}
 
-            - task: TerraformCLI@0
+            - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
               displayName: terraform plan ${{ parameters.stageDisplayName }} sensitive Vars
               condition: and(succeeded(), not(eq('${{parameters.secureVarsFile}}','')))
               inputs:
@@ -165,7 +165,7 @@ stages:
                 arguments: "-pr $env:SYSTEM_PULLREQUEST_PULLREQUESTNUMBER -buildId $env:BUILD_BUILDID -token $env:PAT -inputFile $env:SYSTEM_STAGENAME -stageName $env:SYSTEM_STAGENAME -environment ${{ parameters.environmentName}} -isScan"
                 workingDirectory: ${{ parameters.workingDirectory }}
 
-            - task: TerraformCLI@0
+            - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@1
               displayName: terraform apply ${{ parameters.stageDisplayName }}
               #Apply will occur as follows:
               # if applyOnPr is true - this is for validation of modules
