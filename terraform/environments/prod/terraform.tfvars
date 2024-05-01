@@ -338,6 +338,7 @@ device_manager_vm_details = {
 }
 environment          = "xwc"
 elastic_pool_name    = "xwc-prod-pool"
+e_pool_capacity      = 100
 key_vault_name       = "kv-xwc-coremoj-003"
 license_type         = "Windows_Server"
 location             = "UK South"

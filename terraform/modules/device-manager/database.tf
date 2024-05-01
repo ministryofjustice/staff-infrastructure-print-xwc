@@ -36,7 +36,7 @@ resource "azurerm_mssql_elasticpool" "elastic_pool" {
   sku {
     name     = "StandardPool"
     tier     = "Standard"
-    capacity = 100
+    capacity = var.e_pool_capacity
   }
 
   per_database_settings {

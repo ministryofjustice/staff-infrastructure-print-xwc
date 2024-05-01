@@ -36,6 +36,11 @@ variable "elastic_pool_name" {
   description = "Name of the elastic pool"
 }
 
+variable "e_pool_capacity" {
+  type        = number
+  description = "capacity of the elastic pool e.g. 50 or 100 "
+}
+
 variable "key_vault_name" {
   type        = string
   description = "Key Vault name for disk encryption and local admin password"
