@@ -119,8 +119,8 @@ variable "vm_details" {
   type = map(object({
     availability_zone = list(string),
     nic = object({
-      subnet     = string
-      ip_address = string
+      subnet               = string
+      ip_address           = string
       public_ip_address_id = optional(string)
     }),
     storage_data_disk = object({
