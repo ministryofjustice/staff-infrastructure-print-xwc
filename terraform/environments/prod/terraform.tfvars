@@ -330,7 +330,7 @@ device_manager_vm_details = {
     nic = {
       subnet              = "snet-xwc-test"
       ip_address          = "10.192.30.135"
-      pubic_ip_address_id = "/subscriptions/876eef88-ec3d-47db-b101-ec6f9daefb65/resourceGroups/rg-xwc-app-001/providers/Microsoft.Network/publicIPAddresses/pip-xwc"
+      public_ip_address_id = "/subscriptions/876eef88-ec3d-47db-b101-ec6f9daefb65/resourceGroups/rg-xwc-app-001/providers/Microsoft.Network/publicIPAddresses/pip-xwc"
     }
     tag_update_class = "test"
     os_disk_type     = "Standard_LRS"
