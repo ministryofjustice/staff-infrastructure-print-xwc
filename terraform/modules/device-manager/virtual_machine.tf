@@ -9,6 +9,7 @@ resource "azurerm_network_interface" "NIC" {
     subnet_id                     = data.azurerm_subnet.subnet[each.value.nic.subnet].id
     private_ip_address_allocation = "Static"
     private_ip_address            = each.value.nic.ip_address
+    public_ip_address_id          = each.value.nic.public_ip_address_id != null ? each.value.nic.public_ip_address_id : null
   }
 
   tags = var.tags #This is to avoid terraform plan issues as the tags are applied by policy

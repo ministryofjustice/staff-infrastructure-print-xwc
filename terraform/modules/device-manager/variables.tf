@@ -121,6 +121,7 @@ variable "vm_details" {
     nic = object({
       subnet     = string
       ip_address = string
+      public_ip_address_id = optional(string)
     }),
     storage_data_disk = object({
       type = string
