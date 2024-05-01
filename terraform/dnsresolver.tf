@@ -19,7 +19,7 @@ resource "azurerm_private_dns_txt_record" "offlineprint" {
   ttl                 = 300
 
   record {
-    value = "offlinemode"
+    value = var.value_txt_record
   }
 }
 

@@ -165,6 +165,12 @@ variable "tenant_id" {
   description = "Tenant id"
 }
 
+variable "value_txt_record" {
+  description = "value of print txt record in private dns zone"
+  type        = string
+}
+
+
 variable "vnet_name" {
   description = "VNET name"
   type        = string
