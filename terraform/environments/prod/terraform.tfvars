@@ -3,8 +3,8 @@
 value_txt_record = "FALSE" #change this to change the txt record value for record for offlinemode.print.internal.xcp 
 
 ################
-admin_password          = "VMdefaultPassword"
-admin_user              = "VMdefaultUsername"
+admin_password           = "VMdefaultPassword"
+admin_user               = "VMdefaultUsername"
 app_resource_group_name  = "rg-xwc-app-001"
 automation_account_name  = "auto-xwc-core-001"
 core_resource_group_name = "rg-xwc-core-001"
