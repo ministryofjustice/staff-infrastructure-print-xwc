@@ -18,22 +18,22 @@ resource "azurerm_lb" "load_balancer" {
     subnet_id                     = data.azurerm_subnet.subnet[each.value[0].nic.subnet].id
     private_ip_address            = each.value[0].load_balancer.ip_address
     private_ip_address_allocation = "Static"
-    zones               = ["1","2","3"]
+    zones                         = ["1", "2", "3"]
   }
 
   tags = var.tags
 }
 
 resource "azurerm_lb_probe" "health_probe" {
-  for_each            = local.load_balancers
+  for_each = local.load_balancers
   #resource_group_name = var.app_resource_group_name
-  loadbalancer_id     = azurerm_lb.load_balancer[each.key].id
-  name                = "rule-${var.load_balancer_rule_port}-${each.key}"
-  port                = var.load_balancer_rule_port
+  loadbalancer_id = azurerm_lb.load_balancer[each.key].id
+  name            = "rule-${var.load_balancer_rule_port}-${each.key}"
+  port            = var.load_balancer_rule_port
 }
 
 resource "azurerm_lb_rule" "loadbalancing_rule" {
-  for_each                       = local.load_balancers
+  for_each = local.load_balancers
   #resource_group_name            = var.app_resource_group_name
   loadbalancer_id                = azurerm_lb.load_balancer[each.key].id
   name                           = "rule-${var.load_balancer_rule_port}-${each.key}"
