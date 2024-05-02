@@ -71,9 +71,9 @@ resource "azurerm_virtual_machine" "VM" {
 
   tags = merge(var.tags, { "UpdateClass" = each.value.tag_update_class })
 
-    lifecycle {
+  lifecycle {
     ignore_changes = [
-      storage_data_disk,  # Ignore changes to the entire storage_data_disk block
+      storage_data_disk, # Ignore changes to the entire storage_data_disk block
     ]
   }
 
