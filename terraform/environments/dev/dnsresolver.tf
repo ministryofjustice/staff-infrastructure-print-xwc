@@ -1,0 +1,1 @@
+../../dnsresolver.tf

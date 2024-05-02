@@ -55,8 +55,9 @@ variable "device_manager_vm_details" {
   type = map(object({
     availability_zone = list(string),
     nic = object({
-      subnet     = string
-      ip_address = string
+      subnet               = string
+      ip_address           = string
+      public_ip_address_id = optional(string)
     }),
     storage_data_disk = object({
       type = string
@@ -76,6 +77,11 @@ variable "diag_storage_name" {
 variable "elastic_pool_name" {
   type        = string
   description = "Name of the elastic pool"
+}
+
+variable "e_pool_capacity" {
+  type        = number
+  description = "capacity of the elastic pool e.g. 50 or 100 "
 }
 
 variable "environment" {
@@ -164,6 +170,12 @@ variable "tags" {
 variable "tenant_id" {
   description = "Tenant id"
 }
+
+variable "value_txt_record" {
+  description = "value of print txt record in private dns zone"
+  type        = string
+}
+
 
 variable "vnet_name" {
   description = "VNET name"

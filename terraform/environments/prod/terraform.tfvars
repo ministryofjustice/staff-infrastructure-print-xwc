@@ -1,5 +1,10 @@
-admin_password          = "VMdefaultPassword"
-admin_user              = "VMdefaultUsername"
+###############
+
+value_txt_record = "FALSE" #change this to change the txt record value for record for offlinemode.print.internal.xcp 
+
+################
+admin_password           = "VMdefaultPassword"
+admin_user               = "VMdefaultUsername"
 app_resource_group_name  = "rg-xwc-app-001"
 automation_account_name  = "auto-xwc-core-001"
 core_resource_group_name = "rg-xwc-core-001"
@@ -323,8 +328,9 @@ device_manager_vm_details = {
       size = "256"
     }
     nic = {
-      subnet     = "snet-xwc-test"
-      ip_address = "10.192.30.135"
+      subnet               = "snet-xwc-test"
+      ip_address           = "10.192.30.135"
+      public_ip_address_id = "/subscriptions/876eef88-ec3d-47db-b101-ec6f9daefb65/resourceGroups/rg-xwc-app-001/providers/Microsoft.Network/publicIPAddresses/pip-xwc"
     }
     tag_update_class = "test"
     os_disk_type     = "Standard_LRS"
@@ -333,6 +339,7 @@ device_manager_vm_details = {
 }
 environment          = "xwc"
 elastic_pool_name    = "xwc-prod-pool"
+e_pool_capacity      = 100
 key_vault_name       = "kv-xwc-coremoj-003"
 license_type         = "Windows_Server"
 location             = "UK South"
@@ -351,7 +358,7 @@ storage_image_reference = {
   sku       = "2019-datacenter-gensecond"
   version   = "latest"
 }
-subscription_id = "dc2ea4ec-a86d-435a-9940-70fe36030bff"
+subscription_id = "876eef88-ec3d-47db-b101-ec6f9daefb65"
 tags = {
   ApplicationName  = "VelocityLandingZone"
   BusinessUnit     = "MOJ"

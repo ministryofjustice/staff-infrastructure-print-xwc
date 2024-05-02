@@ -7,6 +7,7 @@ module "device-manager" {
   automation_account_name     = var.automation_account_name
   core_resource_group_name    = var.core_resource_group_name
   elastic_pool_name           = var.elastic_pool_name
+  e_pool_capacity             = var.e_pool_capacity
   location                    = var.location
   key_vault_name              = var.key_vault_name
   oms_workspace_name          = var.oms_workspace_name

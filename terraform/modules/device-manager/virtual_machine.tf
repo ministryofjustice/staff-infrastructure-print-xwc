@@ -7,8 +7,9 @@ resource "azurerm_network_interface" "NIC" {
   ip_configuration {
     name                          = "ipconfig1"
     subnet_id                     = data.azurerm_subnet.subnet[each.value.nic.subnet].id
-    private_ip_address_allocation = "static"
+    private_ip_address_allocation = "Static"
     private_ip_address            = each.value.nic.ip_address
+    public_ip_address_id          = each.value.nic.public_ip_address_id != null ? each.value.nic.public_ip_address_id : null
   }
 
   tags = var.tags #This is to avoid terraform plan issues as the tags are applied by policy
@@ -69,6 +70,12 @@ resource "azurerm_virtual_machine" "VM" {
   }
 
   tags = merge(var.tags, { "UpdateClass" = each.value.tag_update_class })
+
+  lifecycle {
+    ignore_changes = [
+      storage_data_disk, # Ignore changes to the entire storage_data_disk block
+    ]
+  }
 
 }
 
