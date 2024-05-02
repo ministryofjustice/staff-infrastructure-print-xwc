@@ -16,6 +16,7 @@ module "device-manager" {
   diag_storage_name           = var.diag_storage_name
   vm_details                  = var.device_manager_vm_details
   storage_image_reference     = var.storage_image_reference
+  subscription_id             = var.subscription_id
   license_type                = var.license_type
   db_names                    = var.db_names
   sqldb_azuread_administrator = var.sqldb_azuread_administrator

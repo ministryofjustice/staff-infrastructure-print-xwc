@@ -110,6 +110,11 @@ variable "sql_server_name" {
   description = "Will Also be stored in KV"
 }
 
+variable "subscription_id" {
+  description = "Spoke subscription id"
+  default     = null
+}
+
 variable "tags" {
   type        = map(string)
   description = "A map of tags to be applied"
