@@ -136,6 +136,6 @@ resource "azurerm_virtual_machine_data_disk_attachment" "res-171" {
   managed_disk_id    = "/subscriptions/876eef88-ec3d-47db-b101-ec6f9daefb65/resourceGroups/RG-XWC-APP-001/providers/Microsoft.Compute/disks/data-vmxwctestdm01-20240313_010551"
   virtual_machine_id = "/subscriptions/876eef88-ec3d-47db-b101-ec6f9daefb65/resourceGroups/rg-xwc-app-001/providers/Microsoft.Compute/virtualMachines/vmxwctestdm01"
   depends_on = [
-     module.device-manager.azurerm_virtual_machine.VM["vmxwctestdm01"]
+     module.device-manager
   ]
 }
