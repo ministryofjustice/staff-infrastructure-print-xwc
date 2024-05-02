@@ -157,7 +157,7 @@ resource "azurerm_backup_protected_vm" "VM_VAULT" {
 #####
 
 resource "azurerm_virtual_machine_data_disk_attachment" "additional_disk" {
-  count = var.vm_details["vmxwctestdm01"] != null && var.vm_details["vmxwctestdm01"].vm_name == "vmxwctestdm01" ? 1 : 0
+  count = contains(keys(var.vm_details), "vmxwctestdm01") ? 1 : 0
 
   virtual_machine_id = azurerm_virtual_machine.VM["vmxwctestdm01"].id
   lun                = 1
