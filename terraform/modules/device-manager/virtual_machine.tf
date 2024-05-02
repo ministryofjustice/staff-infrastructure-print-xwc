@@ -150,3 +150,22 @@ resource "azurerm_backup_protected_vm" "VM_VAULT" {
   backup_policy_id    = data.azurerm_backup_policy_vm.VAULT_POLICY.id
   source_vm_id        = azurerm_virtual_machine.VM[each.key].id
 }
+
+
+#####
+# This block is to account for the additional data disk forthe vmxwctestdm01 server-this is only in prod
+#####
+
+resource "azurerm_virtual_machine_data_disk_attachment" "additional_disk" {
+  count = var.vm_details["vmxwctestdm01"] != null && var.vm_details["vmxwctestdm01"].vm_name == "vmxwctestdm01" ? 1 : 0
+
+  virtual_machine_id = azurerm_virtual_machine.VM["vmxwctestdm01"].id
+  lun                = 1
+  caching            = "None"
+  create_option      = "Attach"
+  managed_disk_id    = "/subscriptions/876eef88-ec3d-47db-b101-ec6f9daefb65/resourceGroups/RG-XWC-APP-001/providers/Microsoft.Compute/disks/data-vmxwctestdm01-20240313_010551"
+
+  depends_on = [
+    azurerm_virtual_machine.VM["vmxwctestdm01"]
+  ]
+}

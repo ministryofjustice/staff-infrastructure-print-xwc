@@ -121,21 +121,3 @@ resource "azurerm_resource_group_template_deployment" "cloud_agent_update_schedu
   deployment_mode     = "Incremental"
   template_content    = templatefile("./update_schedule_template.json", each.value)
 }
-
-#####
-# This block is to account for the additional data disk forthe vmxwctestdm01 server-this is only in prod
-# This block can be removed if the disk is no longer required.
-#####
-
-resource "azurerm_virtual_machine_data_disk_attachment" "res-171" {
-  # Add a condition to run this block only if subscription_id is set to prod xwc as this code is symlinked to dev
-  count = var.subscription_id == "876eef88-ec3d-47db-b101-ec6f9daefb65" ? 1 : 0
-
-  caching            = "None"
-  lun                = 1
-  managed_disk_id    = "/subscriptions/876eef88-ec3d-47db-b101-ec6f9daefb65/resourceGroups/RG-XWC-APP-001/providers/Microsoft.Compute/disks/data-vmxwctestdm01-20240313_010551"
-  virtual_machine_id = "/subscriptions/876eef88-ec3d-47db-b101-ec6f9daefb65/resourceGroups/rg-xwc-app-001/providers/Microsoft.Compute/virtualMachines/vmxwctestdm01"
-  depends_on = [
-     module.device-manager
-  ]
-}
