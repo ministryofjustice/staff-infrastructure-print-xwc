@@ -16,7 +16,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "private_dns_vnet_link"
   name                  = data.azurerm_virtual_network.corevnet.name
   resource_group_name   = azurerm_resource_group.rg_dns_resolver.name
   private_dns_zone_name = azurerm_private_dns_zone.xcp_int_zone.name
-  virtual_network_id    = data.azurerm_virtual_network.vnet.id
+  virtual_network_id    = data.azurerm_virtual_network.corevnet.id
   tags                  = var.tags
 }
 
