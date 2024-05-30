@@ -12,6 +12,14 @@ resource "azurerm_private_dns_zone" "xcp_int_zone" {
   tags                = var.tags
 }
 
+resource "azurerm_private_dns_zone_virtual_network_link" "private_dns_vnet_link" {
+  name                  = data.azurerm_virtual_network.corevnet.name
+  resource_group_name   = azurerm_resource_group.rg_dns_resolver.name
+  private_dns_zone_name = azurerm_private_dns_zone.xcp_int_zone.name
+  virtual_network_id    = data.azurerm_virtual_network.corevnet.id
+  tags                  = var.tags
+}
+
 resource "azurerm_private_dns_txt_record" "offlineprint" {
   name                = "offlinemode"
   resource_group_name = azurerm_resource_group.rg_dns_resolver.name
@@ -30,6 +38,8 @@ resource "azurerm_private_dns_resolver" "pdnsresolver" {
   virtual_network_id  = data.azurerm_virtual_network.corevnet.id
 
 }
+
+
 
 resource "azurerm_private_dns_resolver_inbound_endpoint" "pdnsinendpoint" {
   name                    = "inbound-endpoint"
