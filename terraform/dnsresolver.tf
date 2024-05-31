@@ -36,6 +36,7 @@ resource "azurerm_private_dns_resolver" "pdnsresolver" {
   resource_group_name = azurerm_resource_group.rg_dns_resolver.name
   location            = azurerm_resource_group.rg_dns_resolver.location
   virtual_network_id  = data.azurerm_virtual_network.corevnet.id
+  tags                = var.tags
 
 }
 
