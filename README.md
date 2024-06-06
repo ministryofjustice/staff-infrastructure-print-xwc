@@ -59,4 +59,15 @@ I think I have erred on the side of addressing today's problem, but ultimately a
 
 A [single pipeline](pipelines/deploy-xwc-app.yml) with separate stages for development and prod is used.
 
+## OfflieMode TXT Record
+Xerox have a mechanism that assists in users being able to continue printing, but relies on the Xerox client being able to perform a DNS resolution of a TXT record, which depending on the value, indicates the availability of the service. 
+
+If the TXT record’s value is ‘True’ then the client will show the cached printers and users can continue to print to cached printers using a standard print queue.
+
+To make it happen via this repo, go to the terraform.tfvars in the respective environment e.g. dev/prod. You will find the variable value_txt_record which is set to FALSE by default.
+
+This can be toggled to TRUE during a change to push patch updates or to perform maintenance on Xerox print servers.
+
+Once changed to TRUE follow the normal PR process to get it reviewed and merged via the pipeline trigger. Once the update or maintenance exercise is completed this value should be reverted back to FALSE.
+
 
