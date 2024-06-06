@@ -60,7 +60,7 @@ I think I have erred on the side of addressing today's problem, but ultimately a
 
 A [single pipeline](pipelines/deploy-xwc-app.yml) with separate stages for development and prod is used.
 
-## OfflieMode TXT Record
+## OfflineMode TXT Record
 
 Xerox have a mechanism that assists in users being able to continue printing, but relies on the Xerox client being able to perform a DNS resolution of a TXT record, which depending on the value, indicates the availability of the service.
 
