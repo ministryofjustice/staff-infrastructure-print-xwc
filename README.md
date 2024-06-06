@@ -66,7 +66,7 @@ Xerox have a mechanism that assists in users being able to continue printing, bu
 
 If the TXT record’s value is ‘True’ then the client will show the cached printers and users can continue to print to cached printers using a standard print queue.
 
-To make it happen via this repo, go to the terraform.tfvars in the respective environment e.g. dev/prod. You will find the variable value_txt_record which is set to FALSE by default.
+To make it happen via this repo, go to the terraform.tfvars in the respective environment e.g. dev/prod. You will find the variable `value_txt_record` which is set to FALSE by default.
 
 This can be toggled to TRUE during a change to push patch updates or to perform maintenance on Xerox print servers.
 
