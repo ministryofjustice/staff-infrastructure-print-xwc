@@ -368,8 +368,8 @@ tags = {
   ProjectStartDate = "05102020"
   RequesterName    = "rob.ashworth@justice.gov.uk"
 }
-tenant_id = "c6874728-71e6-41fe-a9e1-2e8c36776ad8"
-vnet_name = "vnet-xwc-core-001"
-connection_policy = "Redirect"
+tenant_id             = "c6874728-71e6-41fe-a9e1-2e8c36776ad8"
+vnet_name             = "vnet-xwc-core-001"
+connection_policy     = "Redirect"
 database_min_capacity = 20
 database_max_capacity = 50

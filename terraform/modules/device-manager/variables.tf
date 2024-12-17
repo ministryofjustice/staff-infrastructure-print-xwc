@@ -150,6 +150,6 @@ variable "vnet_name" {
 }
 
 variable "connection_policy" {
-  type = string
+  type    = string
   default = "Default"
 }
