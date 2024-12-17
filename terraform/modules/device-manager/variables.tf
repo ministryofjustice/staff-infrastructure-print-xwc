@@ -41,6 +41,16 @@ variable "e_pool_capacity" {
   description = "capacity of the elastic pool e.g. 50 or 100 "
 }
 
+variable "database_min_capacity" {
+  type        = number
+  description = "capacity of the elastic pool e.g. 50 or 100 "
+}
+
+variable "database_max_capacity" {
+  type        = number
+  description = "capacity of the elastic pool e.g. 50 or 100 "
+}
+
 variable "key_vault_name" {
   type        = string
   description = "Key Vault name for disk encryption and local admin password"
@@ -137,4 +147,8 @@ variable "vm_details" {
 variable "vnet_name" {
   description = "VNET name"
   type        = string
+}
+
+variable "connection_policy" {
+  type = string
 }

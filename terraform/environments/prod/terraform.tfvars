@@ -1,6 +1,6 @@
 ###############
 
-value_txt_record = "FALSE" #change this to change the txt record value for record for offlinemode.print.internal.xcp 
+value_txt_record = "XWC.OfflineMode.Enabled=FALSE" #"FALSE" #change this to change the txt record value for record for offlinemode.print.internal.xcp 
 
 ################
 admin_password           = "VMdefaultPassword"
@@ -339,7 +339,7 @@ device_manager_vm_details = {
 }
 environment          = "xwc"
 elastic_pool_name    = "xwc-prod-pool"
-e_pool_capacity      = 100
+e_pool_capacity      = 200
 key_vault_name       = "kv-xwc-coremoj-003"
 license_type         = "Windows_Server"
 location             = "UK South"
@@ -368,5 +368,8 @@ tags = {
   ProjectStartDate = "05102020"
   RequesterName    = "rob.ashworth@justice.gov.uk"
 }
-tenant_id = "c6874728-71e6-41fe-a9e1-2e8c36776ad8"
-vnet_name = "vnet-xwc-core-001"
+tenant_id             = "c6874728-71e6-41fe-a9e1-2e8c36776ad8"
+vnet_name             = "vnet-xwc-core-001"
+connection_policy     = "Redirect"
+database_min_capacity = 20
+database_max_capacity = 50
