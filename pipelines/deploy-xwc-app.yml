@@ -1,3 +1,11 @@
+parameters:
+  - name: TerraformOperation
+    displayName: Terraform Operation
+    values:
+      - plan
+      - apply
+    default: plan
+
 trigger:
   branches:
     include:
