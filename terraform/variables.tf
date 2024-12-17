@@ -196,13 +196,3 @@ variable "database_max_capacity" {
   type        = number
   description = "capacity of the elastic pool e.g. 50 or 100 "
 }
-
-variable "database_min_capacity" {
-  type        = number
-  description = "capacity of the elastic pool e.g. 50 or 100 "
-}
-
-variable "database_max_capacity" {
-  type        = number
-  description = "capacity of the elastic pool e.g. 50 or 100 "
-}
