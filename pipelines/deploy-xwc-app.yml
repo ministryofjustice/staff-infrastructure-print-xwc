@@ -9,68 +9,68 @@ parameters:
 trigger:
   branches:
     include:
-    - main
+      - main
   paths:
     include:
-    - pipelines
-    - scripts
-    - terraform
+      - pipelines
+      - scripts
+      - terraform
 pr:
   branches:
     include:
-    - main
+      - main
   paths:
     include:
-    - pipelines
-    - scripts
-    - terraform
+      - pipelines
+      - scripts
+      - terraform
 
 variables:
-- group: 'secrets'
-- name: spokeName
-  value: xwc
-- name: prodYamlEnv
-  ${{ if eq(variables['Build.Reason'],'PullRequest') }}:
-     value: prod_noapproval
-  ${{ if ne(variables['Build.Reason'],'PullRequest') }}:
-     value: prod_approval
+  - group: "secrets"
+  - name: spokeName
+    value: xwc
+  - name: prodYamlEnv
+    ${{ if eq(variables['Build.Reason'],'PullRequest') }}:
+      value: prod_noapproval
+    ${{ if ne(variables['Build.Reason'],'PullRequest') }}:
+      value: prod_approval
 
 stages:
-- template: templates/template-terraform-deploy-stage.yml
-  parameters:
-    backendAzureRmResourceGroupName: "rg-xwc-core-001"
-    backendAzureRmStorageAccountName: "stxwctfstate001"
-    backendAzureRmContainerName: "tfstate"
-    backendAzureRmKey: "xwcapp.terraform.tfstate"
-    backendServiceArm: scDevXWC
-    deployFlag: true
-    ensureBackend: true
-    environmentName: dev
-    githubPat: $(GITHUB_PAT)
-    stageName: "dev"
-    stageDisplayName: dev
-    spokeName: ${{ variables.spokeName }}
-    subscription_id: 779c236c-a27b-405d-b0b8-0bbb5f7b5c67
-    tenant_id: 0bb413d7-160d-4839-868a-f3d46537f6af
-    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/dev'
-    yamlenv: dev_noapproval
+  - template: templates/template-terraform-deploy-stage.yml
+    parameters:
+      backendAzureRmResourceGroupName: "rg-xwc-core-001"
+      backendAzureRmStorageAccountName: "stxwctfstate001"
+      backendAzureRmContainerName: "tfstate"
+      backendAzureRmKey: "xwcapp.terraform.tfstate"
+      backendServiceArm: scDevXWC
+      deployFlag: true
+      ensureBackend: true
+      environmentName: dev
+      githubPat: $(GITHUB_PAT)
+      stageName: "dev"
+      stageDisplayName: dev
+      spokeName: ${{ variables.spokeName }}
+      subscription_id: 779c236c-a27b-405d-b0b8-0bbb5f7b5c67
+      tenant_id: 0bb413d7-160d-4839-868a-f3d46537f6af
+      workingDirectory: "$(System.DefaultWorkingDirectory)/terraform/environments/dev"
+      yamlenv: dev_noapproval
 
-- template: templates/template-terraform-deploy-stage.yml
-  parameters:
-    backendAzureRmResourceGroupName: "rg-prod-tfstate-001"
-    backendAzureRmStorageAccountName: "stxwctfstate003"
-    backendAzureRmContainerName: "tfstate"
-    backendAzureRmKey: "xwcapp.terraform.tfstate"
-    backendServiceArm: scProdXWC
-    dependsOn: ["dev"]
-    deployFlag: true
-    ensureBackend: true
-    environmentName: prod
-    githubPat: $(GITHUB_PAT)
-    stageName: prod
-    stageDisplayName: Prod
-    spokeName: ${{ variables.spokeName }}
-    subscription_id: 876eef88-ec3d-47db-b101-ec6f9daefb65
-    tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
-    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/prod'
-    yamlenv: $(prodYamlEnv)
+  - template: templates/template-terraform-deploy-stage.yml
+    parameters:
+      backendAzureRmResourceGroupName: "rg-prod-tfstate-001"
+      backendAzureRmStorageAccountName: "stxwctfstate003"
+      backendAzureRmContainerName: "tfstate"
+      backendAzureRmKey: "xwcapp.terraform.tfstate"
+      backendServiceArm: scProdXWC
+      dependsOn: ["dev"]
+      deployFlag: true
+      ensureBackend: true
+      environmentName: prod
+      githubPat: $(GITHUB_PAT)
+      stageName: prod
+      stageDisplayName: Prod
+      spokeName: ${{ variables.spokeName }}
+      subscription_id: 876eef88-ec3d-47db-b101-ec6f9daefb65
+      tenant_id: c6874728-71e6-41fe-a9e1-2e8c36776ad8
+      workingDirectory: "$(System.DefaultWorkingDirectory)/terraform/environments/prod"
+      yamlenv: $(prodYamlEnv)
