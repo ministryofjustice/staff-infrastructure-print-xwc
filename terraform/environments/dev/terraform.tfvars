@@ -151,3 +151,4 @@ tenant_id             = "0bb413d7-160d-4839-868a-f3d46537f6af"
 vnet_name             = "vnet-xwc-core-001"
 database_min_capacity = 10
 database_max_capacity = 20
+connection_policy = "Default"
