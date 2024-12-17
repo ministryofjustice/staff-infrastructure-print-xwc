@@ -1,8 +1,6 @@
 
 ###############
-
 value_txt_record = "FALSE" #change this to change the txt record value for record for offlinemode.print.internal.xcp 
-
 ################
 
 admin_password           = "VMdefaultPassword"
