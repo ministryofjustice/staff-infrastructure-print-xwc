@@ -40,8 +40,8 @@ resource "azurerm_mssql_elasticpool" "elastic_pool" {
   }
 
   per_database_settings {
-    min_capacity = 10
-    max_capacity = 20
+    min_capacity = 20
+    max_capacity = 50
   }
   tags = var.tags
 

@@ -1,6 +1,6 @@
 ###############
 
-value_txt_record = "FALSE" #change this to change the txt record value for record for offlinemode.print.internal.xcp 
+value_txt_record = "XWC.OfflineMode.Enabled=FALSE" #"FALSE" #change this to change the txt record value for record for offlinemode.print.internal.xcp 
 
 ################
 admin_password           = "VMdefaultPassword"
@@ -339,7 +339,7 @@ device_manager_vm_details = {
 }
 environment          = "xwc"
 elastic_pool_name    = "xwc-prod-pool"
-e_pool_capacity      = 100
+e_pool_capacity      = 200
 key_vault_name       = "kv-xwc-coremoj-003"
 license_type         = "Windows_Server"
 location             = "UK South"
