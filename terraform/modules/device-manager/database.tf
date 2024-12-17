@@ -18,6 +18,7 @@ resource "azurerm_mssql_server" "sql_server" {
   administrator_login_password  = random_password.password.result
   minimum_tls_version           = 1.2
   public_network_access_enabled = false
+  connection_policy             = var.connection_policy
   azuread_administrator {
     login_username = var.sqldb_azuread_administrator.username
     object_id      = var.sqldb_azuread_administrator.object_id
@@ -40,8 +41,8 @@ resource "azurerm_mssql_elasticpool" "elastic_pool" {
   }
 
   per_database_settings {
-    min_capacity = 20
-    max_capacity = 50
+    min_capacity = var.database_min_capacity
+    max_capacity = var.database_mix_capacity
   }
   tags = var.tags
 

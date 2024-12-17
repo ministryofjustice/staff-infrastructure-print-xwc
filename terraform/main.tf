@@ -24,6 +24,7 @@ module "device-manager" {
   private_link_subnet         = var.private_link_subnet
   tags                        = var.tags
   vnet_name                   = var.vnet_name
+  connection_policy           = var.connection_policy
 }
 
 
