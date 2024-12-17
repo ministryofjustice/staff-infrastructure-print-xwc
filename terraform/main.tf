@@ -25,6 +25,8 @@ module "device-manager" {
   tags                        = var.tags
   vnet_name                   = var.vnet_name
   connection_policy           = var.connection_policy
+  database_min_capacity       = var.database_min_capacity
+  database_max_capacity       = var.database_max_capacity
 }
 
 
