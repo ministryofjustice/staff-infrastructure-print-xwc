@@ -152,3 +152,5 @@ vnet_name             = "vnet-xwc-core-001"
 database_min_capacity = 10
 database_max_capacity = 20
 connection_policy     = "Default"
+
+# Note
