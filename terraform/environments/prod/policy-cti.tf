@@ -341,6 +341,7 @@ resource "azurerm_resource_policy_assignment" "Enablechangetracking-vmxwctestdm0
   })
 }
 resource "azurerm_resource_policy_exemption" "BuiltInUserAssignedManagedIdentity_vmxwctestca01" {
+  provider                        = azurerm.spoke
   name                            = "exempt UserAssignedManagedIdentity vmxwctestca01"
   resource_id                     = data.azurerm_virtual_machine.vmxwctestca01.id
   policy_assignment_id            = azurerm_resource_policy_assignment.Enablechangetracking-vmxwctestca01.id
@@ -348,6 +349,7 @@ resource "azurerm_resource_policy_exemption" "BuiltInUserAssignedManagedIdentity
   exemption_category              = "Waiver"
 }
 resource "azurerm_resource_policy_exemption" "BuiltInUserAssignedManagedIdentity_vmxwctestca02" {
+  provider                        = azurerm.spoke
   name                            = "exempt UserAssignedManagedIdentity to vmxwctestca02"
   resource_id                     = data.azurerm_virtual_machine.vmxwctestca02.id
   policy_assignment_id            = azurerm_resource_policy_assignment.Enablechangetracking-vmxwctestca02.id
@@ -355,6 +357,7 @@ resource "azurerm_resource_policy_exemption" "BuiltInUserAssignedManagedIdentity
   exemption_category              = "Waiver"
 }
 resource "azurerm_resource_policy_exemption" "BuiltInUserAssignedManagedIdentity_vmxwctestdm01" {
+  provider                        = azurerm.spoke
   name                            = "exempt UserAssignedManagedIdentity to vmxwctestdm01"
   resource_id                     = data.azurerm_virtual_machine.vmxwctestdm01.id
   policy_assignment_id            = azurerm_resource_policy_assignment.Enablechangetracking-vmxwctestdm01.id
