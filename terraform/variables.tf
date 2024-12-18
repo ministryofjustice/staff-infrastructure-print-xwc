@@ -196,3 +196,24 @@ variable "database_max_capacity" {
   type        = number
   description = "capacity of the elastic pool e.g. 50 or 100 "
 }
+
+variable "resource_group_dcr" {
+  type        = string
+  description = "Resource group name"
+  default     = null
+}
+variable "resource_group_vms" {
+  type        = string
+  description = "Resource group name"
+  default     = null
+}
+variable "resource_group_dcr_id" {
+  type        = string
+  description = "Resource group id"
+  default     = null
+}
+variable "log_analytics_workspace_id" {
+  type        = string
+  description = "Log analytics workspace id"
+  default     = null
+} 

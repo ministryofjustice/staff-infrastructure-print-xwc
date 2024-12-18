@@ -373,3 +373,7 @@ vnet_name             = "vnet-xwc-core-001"
 connection_policy     = "Redirect"
 database_min_capacity = 20
 database_max_capacity = 50
+
+resource_group_vms         ="rg-xwc-app-001"
+resource_group_dcr         = "rg-xwc-core-001"
+log_analytics_workspace_id ="/subscriptions/876eef88-ec3d-47db-b101-ec6f9daefb65/resourceGroups/rg-xwc-core-001/providers/Microsoft.OperationalInsights/workspaces/log-xwc-core-003"
