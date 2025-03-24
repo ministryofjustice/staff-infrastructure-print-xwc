@@ -336,10 +336,38 @@ device_manager_vm_details = {
     os_disk_type     = "Standard_LRS"
     vm_size          = "Standard_B4ms"
   },
+  "vmxwcdm05" = {
+    availability_zone = ["2"]
+    storage_data_disk = {
+      type = "Premium_LRS"
+      size = "256"
+    }
+    nic = {
+      subnet     = "snet-xwc-core-001"
+      ip_address = "10.192.30.34"
+    }
+    tag_update_class = "Gold1"
+    os_disk_type     = "Premium_LRS"
+    vm_size          = "Standard_D8s_V4"
+  },
+  "vmxwcdm06" = {
+    availability_zone = ["3"]
+    storage_data_disk = {
+      type = "Premium_LRS"
+      size = "256"
+    }
+    nic = {
+      subnet     = "snet-xwc-core-001"
+      ip_address = "10.192.30.35"
+    }
+    tag_update_class = "Gold1"
+    os_disk_type     = "Premium_LRS"
+    vm_size          = "Standard_D8s_V4"
+  },
 }
 environment          = "xwc"
 elastic_pool_name    = "xwc-prod-pool"
-e_pool_capacity      = 200
+e_pool_capacity      = 300
 key_vault_name       = "kv-xwc-coremoj-003"
 license_type         = "Windows_Server"
 location             = "UK South"
