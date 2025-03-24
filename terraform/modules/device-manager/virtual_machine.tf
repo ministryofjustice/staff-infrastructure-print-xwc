@@ -110,32 +110,6 @@ resource "azurerm_virtual_machine_extension" "AVEXT" {
 }
 
 
-resource "azurerm_virtual_machine_extension" "OMSAGENT" {
-  for_each                   = var.vm_details
-  name                       = "MicrosoftMonitoringAgent"
-  virtual_machine_id         = azurerm_virtual_machine.VM[each.key].id
-  publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
-  type                       = "MicrosoftMonitoringAgent"
-  type_handler_version       = "1.0"
-  auto_upgrade_minor_version = true
-
-  settings = <<-BASE_SETTINGS
-  {
-    "azureResourceId" : "${azurerm_virtual_machine.VM[each.key].id}",
-    "stopOnMultipleConnections" : true,
-    "workspaceId" : "${data.azurerm_log_analytics_workspace.OMS_WORKSPACE.workspace_id}"
-  }
-  BASE_SETTINGS
-
-  protected_settings = <<-PROTECTED_SETTINGS
-  {
-    "workspaceKey" : "${data.azurerm_log_analytics_workspace.OMS_WORKSPACE.primary_shared_key}"
-  }
-  PROTECTED_SETTINGS
-
-  tags = var.tags #This is to avoid terraform plan issues as the tags are applied by policy
-}
-
 resource "azurerm_virtual_machine_extension" "login_for_windows" {
   for_each                   = var.vm_details
   name                       = "AADLoginForWindows"
