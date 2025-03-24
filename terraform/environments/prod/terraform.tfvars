@@ -360,7 +360,7 @@ device_manager_vm_details = {
       subnet     = "snet-xwc-core-001"
       ip_address = "10.192.30.35"
     }
-    tag_update_class = "Gold1"
+    tag_update_class = "Gold2"
     os_disk_type     = "Premium_LRS"
     vm_size          = "Standard_D8s_V4"
   },
