@@ -19,7 +19,7 @@ parameters:
   terraformOperation: "plan"
   terraformVersion: "1.5.7"
   workingDirectory: ""
-  vmImage: "ubuntu-20.04"
+  vmImage: "ubuntu-24.04"
   yamlenv: ""
 
 stages:
